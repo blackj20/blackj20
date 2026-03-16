@@ -1,0 +1,22 @@
+.message{
+    position: sticky;
+    left: 25%;
+    right: 25%;
+    margin: 15px 0 15px 0;
+    background-color: red;
+    align-self: center;
+    text-align: center;
+    width: 50%;
+    height: 100px;
+    border-radius: 15px;
+    padding: 5px;
+    
+}
+.message img{
+    width: 50px;
+    background-color: transparent;
+}
+.message hr{
+    color: rgba(6, 253, 34, 0.548);
+    
+}

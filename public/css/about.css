@@ -1,0 +1,79 @@
+
+/* Liste des classes utilisées dans ce document :
+
+logo
+historique
+misson
+vision
+valeurs
+contact */
+
+i{
+    color: rgb(251, 156, 4);
+}
+
+
+h1{
+    color: rgb(255, 180, 4);
+}
+h2{
+    color: rgb(255, 180, 4);
+}
+main{
+    margin: 20px 0 200px 0;
+}
+
+
+.historique p{
+  font-family: 'Courier New', Courier, monospace;
+  margin: 20px;
+}
+
+.misson{
+    margin: 20px;
+}
+
+.vision{
+    margin: 20px;
+}
+
+.valeurs{
+    margin: 20px;
+}
+
+.contact{
+    margin: 20px;
+}
+.fa-brands{
+    color: rgb(37, 211, 102);
+}
+
+
+footer{
+    background: linear-gradient(to right, #0d0d0d, rgba(34, 82, 8, 0.739), #101010);
+    text-align: center;
+    position: relative;
+    bottom: 0;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+   
+}
+footer ul{
+    margin: 0;
+    display: flex;
+    justify-content: center;
+
+}
+footer ul li{
+    list-style: none;
+}
+footer ul li a{
+    text-decoration: none;
+    color: rgb(246, 246, 246);
+    transition: background-color 0.3s ease;
+    margin-left: 10px;
+}
+main{
+    margin-bottom: 20px;
+}
