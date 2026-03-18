@@ -1,40 +1,42 @@
-
-
-i{
-    color: rgb(251, 156, 4);
+p{
+    margin-left: 20px;
+}
+li{
+      margin-left: 20px;
 }
 
 
 h1{
     color: rgb(255, 180, 4);
+    margin: 5px;
 }
 h2{
     color: rgb(255, 180, 4);
-}
-main{
-    margin: 20px 0 200px 0;
+    margin-left: 5px;
 }
 
+i{
+      color: rgb(255, 180, 4);
+}
 
 .historique p{
-  font-family: 'Courier New', Courier, monospace;
   margin: 20px;
 }
 
 .misson{
-    margin: 20px;
+    margin: 5px;
 }
 
 .vision{
-    margin: 20px;
+    margin: 5px;
 }
 
 .valeurs{
-    margin: 20px;
+    margin: 5px;
 }
 
 .contact{
-    margin: 20px;
+    margin: 5px;
 }
 
 
@@ -47,13 +49,16 @@ footer{
     width: 100%;
     display: flex;
     flex-direction: column;
+    justify-content: center;
     padding-top:10px;
    
 }
 footer ul{
     margin: 0;
     display: flex;
-    justify-content: center;
+    align-self: center;
+    margin-right: 50px;
+    
 
 }
 footer ul li{
@@ -63,7 +68,8 @@ footer ul li a{
     text-decoration: none;
     color: rgb(246, 246, 246);
     transition: background-color 0.3s ease;
-    margin-left: 10px;
+    margin-right: 10px;
+    text-align: center;
 }
 main{
     margin-bottom: 20px;
@@ -112,6 +118,7 @@ main{
         font-size: 14px;
         padding: 0;
     }
+   
     .barre_recherche{
         width: 80%;
         margin-bottom: 10px;
