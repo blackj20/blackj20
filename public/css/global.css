@@ -87,19 +87,59 @@ nav a:hover{
     top: 8px;
 }
 
-footer{
-    background: linear-gradient(to right, #0d0d0d, rgba(34, 82, 8, 0.739), #101010);
+footer,
+.site-footer{
+    background: radial-gradient(circle at 20% 20%, rgba(255,147,7,0.12), transparent 35%), 
+                radial-gradient(circle at 80% 40%, rgba(34,82,8,0.18), transparent 32%), 
+                #0b0b0d;
+    color: #e8e8ec;
     text-align: center;
-    position: fixed;
-    bottom: 0;
     width: 100%;
     display: flex;
     flex-direction: column;
-    width: 100%;
-    height: 60px;
-    bottom:0;
-   
+    align-items: center;
+    gap: 16px;
+    padding: 28px 22px;
+    background: linear-gradient(to right, #0d0d0d, rgba(34, 82, 8, 0.739), #000000);;
+    box-shadow: 0 -10px 35px rgba(0,0,0,0.45);
 }
+
+.footer-social,
+.footer-links{
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+    align-items: center;
+    justify-content: center;
+}
+
+.footer-social-link,
+.footer-link{
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 44px;
+    padding: 10px 14px;
+    border-radius: 14px;
+    background: rgba(255,255,255,0.05);
+    border: 1px solid rgba(255,255,255,0.08);
+    color: #f6f6f7;
+    text-decoration: none;
+    font-size: 0.92rem;
+    letter-spacing: 0.01em;
+}
+
+.footer-social-link i{
+    font-size: 1rem;
+}
+
+.footer-copy{
+    width: 100%;
+    margin-top: 6px;
+    font-size: 0.86rem;
+    color: rgba(232,232,236,0.72);
+}
+
 
 @media screen and (max-width: 600px){
 
@@ -152,14 +192,22 @@ footer{
     main{
         margin: 20px 0 120px 0;
     }
-    footer{
+    footer,
+    .site-footer{
         position: static;
-    }
-    footer{
-        position: static;
-        display: flex;
         align-items: center;
+        padding: 22px 16px;
+        gap: 14px;
+    }
+    .footer-social,
+    .footer-links{
+        width: 100%;
         justify-content: center;
-        font-size: 14px;
+        gap: 10px;
+    }
+    .footer-link,
+    .footer-social-link{
+        min-width: 5px;
+        padding: 12px;
     }
 }

@@ -7,6 +7,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="css/global.css">
     <link rel="stylesheet" href="css/actualités.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
     
     <title>actualités</title>
 </head>
@@ -32,25 +33,40 @@
         </nav>
     </header>
     <main>
+            <div  class="barre_recherche">
+                <input type="text" placeholder="Rechercher..." id="accrp">
+                <span class="btn" id="go"><i class="fa-solid fa-magnifying-glass"></i></span>
+            </div>
 
-        <div class="message">
-            <h1>page d'actualités</h1>
-            <p>admire</p>
+       <section>
+        <div class="welcome">
+            <h1>Bienvenue chez<span style="color:  rgba(255, 147, 7, 0.994);">EMC</span></h1>
+            <h3>Réalisez vos projets de construction avec expertise et innovation</h3>     
         </div>
+       
+        <section id="actualiter" class="container"> <!--lidee est de cree un vitrine de projets deja existant dans la base de données-->
 
-        <section id="annonce">
-            <h2>Annonce</h2>
-            <div id="actualite-container" class="cart"></div>
-       </section>
-
-        <section id="actualite">
-            <h2>Actualités</h2>
-            <div id="actualite-container" class="cart"></div>
+        <h2>Nos Réalisations</h2>
+        <div id="realisation-container" class="cart"></div>
        </section>
        
     </main>
-    <footer>
-        <p> &copy; 2024 EMC Construction. Tous droits réservés.</p>
+   <footer class="site-footer">
+        <div class="footer-social">
+            <a class="footer-social-link" href="actualiter.html" aria-label="Facebook"><i class="fab fa-facebook-f"></i></a>
+            <a class="footer-social-link" href="realisation.html" aria-label="Twitter"><i class="fab fa-twitter"></i></a>
+            <a class="footer-social-link" href="service.html" aria-label="Instagram"><i class="fab fa-instagram"></i></a>
+            <a class="footer-social-link" href="about.html" aria-label="LinkedIn"><i class="fab fa-linkedin-in"></i></a>
+        </div>
+
+        <div class="footer-links">
+            <a class="footer-link" href="actualiter.html">actualités</a>
+            <a class="footer-link" href="realisation.html">réalisations</a>
+            <a class="footer-link" href="service.html">services</a>
+            <a class="footer-link" href="about.html">à propos</a>
+        </div>
+
+        <p class="footer-copy">© 2024 EMC Construction. Tous droits réservés.</p>
     </footer>
     
 </body>

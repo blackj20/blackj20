@@ -29,6 +29,38 @@ const cryptePassword=async(password)=>{ // pour acher le mot de pass
 
 
 
+const init = async () => {
+    const adminExists = await new Promise((resolve, reject) => {
+        db.get('SELECT * FROM users WHERE username = ?', ['admin'], (err, row) => {
+            if (err) {
+                reject(err)
+            } else {
+                resolve(!!row)
+            }
+        })
+    })
+
+    if (!adminExists) {
+        const hashedPassword = await  cryptePassword('admin')
+      
+        await new Promise((resolve, reject) => {
+            db.run('INSERT INTO users (username, password, role) VALUES (?, ?, ?)', ['admin', hashedPassword, 'admin'], function (err) {
+                if (err) {
+                    reject(err)
+                } else {
+                    resolve()
+                }
+            })
+        })
+        console.log('Admin user created with username "admin" and password "admin"')
+    } else {
+        console.log('Admin user already exists')
+    }
+}
+
+init().catch(err => console.error('Error initializing database:', err))
+
+
 
 
 module.exports={comparePassword,cryptePassword,decoded , signeToken}

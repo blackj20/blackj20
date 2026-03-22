@@ -1,8 +1,9 @@
 const express = require('express')
 const router = express.Router()
-const { hashe }= require('../utils/tootls.utils')
 const path = require('path')
 
+
+router.get('/admin',require('./admin.route'))
 
 // ================= get routre ==============================
 
@@ -24,7 +25,7 @@ router.get('/actualites', (req,res)=>{
 } )
 // =============================post routes ========================
 
-router.post('admin',require('./admin.route.js'))
+router.get('/admin',require('./admin.route'))
 
 
 
