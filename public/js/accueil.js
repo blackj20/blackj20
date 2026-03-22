@@ -1,7 +1,7 @@
 const api_actualite=[// ------------------------- similation des donnés-------------------
-    { titre:"maison de 5 etage a ngombe" ,img:"image/WhatsApp Image 2026-03-16 at 10.05.27(2).jpeg",data_description:"appartement meuble si tue a ..." },
-    { titre:"hotel trois etoile" ,img:"image/WhatsApp Image 2026-03-16 at 10.05.26(1).jpeg",data_description:"des suite de luxe cliumatise avec ..." },
-    { titre:" appartement de trois niveaux" ,img:"image/WhatsApp Image 2026-03-16 at 09.44.52(1).jpeg",data_description:"appartement de haut quanlites dans des ..." },
+    { titre:"maison de 5 etage a ngombe" ,  img:"image/WhatsApp Image 2026-03-16 at 10.05.27(2).jpeg",data_description:"appartement meuble si tue a ..." },
+    { titre:"hotel trois etoile" ,          img:"image/WhatsApp Image 2026-03-16 at 10.05.26(1).jpeg",data_description:"des suite de luxe cliumatise avec ..." },
+    { titre:" appartement de trois niveaux",img:"image/WhatsApp Image 2026-03-16 at 09.44.52(1).jpeg",data_description:"appartement de haut quanlites dans des ..." },
       ]
 
 const api_realisation=[
@@ -102,4 +102,7 @@ const loadindingImg=(data_realis)=>{// on cree des poste en boucle
 }
 
 loadindingImg(api_actualite,api_project,api_realisation)
+
+
+
 
