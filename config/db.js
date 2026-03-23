@@ -7,7 +7,7 @@ const db=new sqlt.Database(DB_PATH,(err)=>{
 
         console.log('Error connecting to database',err)
     }else{
-        console.log('Connected to database'+DB_PATH)
+        console.log('Connected to database '+DB_PATH)
     }
 })
 module.exports=db

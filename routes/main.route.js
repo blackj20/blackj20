@@ -3,7 +3,7 @@ const router = express.Router()
 const path = require('path')
 
 
-router.get('/admin',require('./admin.route'))
+router.use('/admin',require('./admin.route'))
 
 // ================= get routre ==============================
 
@@ -23,9 +23,12 @@ router.get('/actualites', (req,res)=>{
    res.sendFile(path.join(__dirname,'../public/actualites.html'))
 
 } )
-// =============================post routes ========================
+// ==========================post routes ========================
 
-router.get('/admin',require('./admin.route'))
+router.post('/',(req,res)=>{console.log("hello page d'accueil ")} )
+router.post('/realisation',(req,res)=>{console.log("hello realisation")})
+router.post('/actualites',(req,res)=>{console.log("hello actualites")} )
+
 
 
 

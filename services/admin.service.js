@@ -1,4 +1,4 @@
-const db = require('../config/db')
+const db = require('../config/init')
 
 const creeUnactualiter=(titre,description,image)=>{
     return new Promise((resolve, reject) => {
@@ -109,6 +109,24 @@ const editElem=(target ,element)=>{
         )
     })
 }
+//=================================== le vu de la page =========================================
+
+function logPageView(req, res, next) {
+    const page = req.path
+    const timestamp = new Date().toISOString()
+
+    // Insérer la vue dans la base de données
+    const query = 'INSERT INTO page_views (page, timestamp) VALUES (?, ?)'
+    db.run(query, [page, timestamp], (err) => {
+        if (err) {
+            console.error('Error logging page view:', err)
+        }
+        // Continue to the next middleware/route handler
+        next()
+    })
+}
+
+module.exports = 
 
 
-module.exports={creeUnactualiter,creeUnrealisation,creeUnannonce,getAllElement,editElem}
+module.exports={creeUnactualiter,creeUnrealisation,creeUnannonce,getAllElement,editElem,logPageView}

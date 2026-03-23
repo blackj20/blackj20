@@ -31,6 +31,14 @@ db.serialize(() => {
         annee text NOT NULL,
         titre text NOT NULL,
         message text not null,
+        created_at datetime default current_timestamp
+        
+    )`)
+     db.run(`CREATE TABLE IF NOT EXISTS visiteur (
+        date text NOT NULL,
+        page text NOT NULL,
+        visiteur integer,
+        created_at datetime default current_timestamp
         
     )`)
 })
