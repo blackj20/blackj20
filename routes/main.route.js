@@ -4,6 +4,8 @@ const path = require('path')
 
 
 router.use('/admin',require('./admin.route'))
+router.use('/api',require('./api.route'))
+
 
 // ================= get routre ==============================
 
@@ -25,9 +27,6 @@ router.get('/actualites', (req,res)=>{
 } )
 // ==========================post routes ========================
 
-router.post('/',(req,res)=>{console.log("hello page d'accueil ")} )
-router.post('/realisation',(req,res)=>{console.log("hello realisation")})
-router.post('/actualites',(req,res)=>{console.log("hello actualites")} )
 
 
 

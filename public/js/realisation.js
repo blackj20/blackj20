@@ -4,7 +4,14 @@
 const getData=async()=>{//recuperaeation des donne au back
 
     try {
-        const dataRealisation= await fetch("http://loalhost:8080/get_realisation")
+        const dataRealisation= await fetch(" http://localhost:8080/api/get_realisation",{
+            method:"POST",
+            headers:{
+                "Content-Type":"application/json"
+            },
+             body:JSON.stringify({data:"realisation"}) 
+        })
+
         const realisation= dataRealisation.json()
 
         if(!dataRealisation.ok) throw new Error(realisation.message);
@@ -12,12 +19,12 @@ const getData=async()=>{//recuperaeation des donne au back
         loadindingImg(realisation)
         
     } catch (err) {
-        console.error( "echec lor du chargement des donnes") 
+        console.error( "echec lor du chargement des donnes")
     }
 
 }
 
-// getData()
+getData()
 
 const api_realisation=[// fake data 
 

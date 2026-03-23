@@ -4,7 +4,11 @@ const express= require('express')
 const app=express()
 const cors= require('cors')
 const { statsMiddleware_}=require('./middleware/stat.middleware')
+const { trafique} = require('./middleware/global.middleware')
 
+
+app.use(trafique)
+app.use(statsMiddleware_)
 
 app.use(express.static("public"))
 app.use(cors())

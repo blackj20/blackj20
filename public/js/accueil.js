@@ -20,6 +20,33 @@ const api_project=[
 
 
 
+
+
+const getData=async()=>{//recuperaeation des donne au back
+
+    try {
+        const dataRealisation= await fetch(" http://localhost:8080/api/",{
+            method:"POST",
+            headers:{
+                "Content-Type":"application/json"
+            },
+             body:JSON.stringify({data:"accueil"}) 
+        })
+
+        const realisation= dataRealisation.json()
+
+        if(!dataRealisation.ok) throw new Error(realisation.message);
+
+        loadindingImg(realisation)
+        
+    } catch (err) {
+        console.error( "echec lor du chargement des donnes")
+    }
+
+}
+
+getData()
+
 const poste=(data_api,parent="",ClassName="item",info_div="active")=>{
 
     if(!parent)return alert(" erreur arrét 'affichage  parent manquant !")

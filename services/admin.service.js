@@ -69,7 +69,7 @@ const getAllElement=(target)=>{
 
             if (err) return reject("une erreur se produit "+err)// si il-y-a une erreur 
 
-            if(rows.length===0) resolve("pas encore d'annoce dans la base de donnés") //si la liste est vide
+            if(rows.length===0) resolve("pas encore d'element dans la base de donnés") //si la liste est vide
 
             reject(rows) //sinon on revois le donnes present 
         })
@@ -126,7 +126,7 @@ function logPageView(req, res, next) {
     })
 }
 
-module.exports = 
+
 
 
 module.exports={creeUnactualiter,creeUnrealisation,creeUnannonce,getAllElement,editElem,logPageView}
