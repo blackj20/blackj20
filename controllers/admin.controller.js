@@ -1,3 +1,5 @@
+
+
 const srv = require('../services/admin.service')
 
 const realisation = async (req, res) => {
@@ -8,6 +10,7 @@ const realisation = async (req, res) => {
     res.status(500).json({ message: 'une erreur est survenue', error })
   }
 }
+
 
 const actualite = async (req, res) => {
   try {
@@ -116,14 +119,16 @@ const checkCoockie = (req, res, next) => {
   }
 }
 
-module.exports ={ checkDataCreat,
-                  auth,
-                  logincheck,
-                  isAdmin,
-                  IsOwner,
-                  realisation,
-                  actualite,
-                  annonce,
-                  uploadImage,
-                  checkCoockie
-                }
+module.exports ={ 
+  
+  checkDataCreat,
+  auth,
+  logincheck,
+  isAdmin,
+  IsOwner,
+  realisation,
+  actualite,
+  annonce,
+  uploadImage,
+  checkCoockie
+ }
