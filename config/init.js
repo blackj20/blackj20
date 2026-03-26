@@ -26,13 +26,11 @@ db.serialize(() => {
        
     )`)
 
-    db.run(`CREATE TABLE IF NOT EXISTS annonce (
+    db.run(`CREATE TABLE IF NOT EXISTS images (
         id INTEGER PRIMARY KEY AUTOINCREMENT,
-        annee text NOT NULL,
-        titre text NOT NULL,
-        message text not null,
+        filename TEXT NOT NULL,
+        path TEXT NOT NULL,
         created_at datetime default current_timestamp
-        
     )`)
      db.run(`CREATE TABLE IF NOT EXISTS visiteur (
         date text NOT NULL,

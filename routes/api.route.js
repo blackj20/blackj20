@@ -12,8 +12,6 @@ const { routeRequette}=require('../middleware/global.middleware')
 router.post('/',routeRequette,server_api ) // l'accueil
 router.post('/get_realisation',routeRequette,server_api)
 router.post('/get_actualites',routeRequette,server_api )
-router.post('/get_actualites',(req,res)=>{
-    req.resume
-})
 
-module.exports=router   
+
+module.exports=router

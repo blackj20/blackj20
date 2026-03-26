@@ -1,4 +1,6 @@
-env
+
 node_modules
 Plan.txt
-public/image
+image 
+uploads
+.env
