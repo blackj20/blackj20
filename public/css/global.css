@@ -196,7 +196,7 @@ footer,
     .site-footer{
         position: static;
         align-items: center;
-        padding: 22px 16px;
+        padding: 22px 0px;
         gap: 14px;
     }
     .footer-social,
@@ -211,3 +211,4 @@ footer,
         padding: 12px;
     }
 }
+

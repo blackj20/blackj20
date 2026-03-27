@@ -29,20 +29,6 @@ const annonce = async (req, res) => {
     res.status(500).json({ message: 'une erreur est survenue', error })
   }
 }
-// -------------------------------- uploads image ---------------------------------------
-
-const uploadImage = async (req, res) => { 
-
-  if (!req.file) return res.status(400).json({ message: 'Aucun fichier reçu' })
-
-  try {
-    const saved = await srv.saveImageRecord(req.file)
-    const url = req.protocol + '://' + req.get('host') + '/' + saved.path
-    res.status(201).json({ message: 'Image uploadée avec succès', data: { ...saved, url } })
-  } catch (error) {
-    res.status(500).json({ message: `une erreur est survenue_controlleur: ${error.message}` })
-  }
-}
 
 // ------------------------ check register -----------------------
 const checkDataCreat = (req, res, next) => {
@@ -119,6 +105,22 @@ const checkCoockie = (req, res, next) => {
   }
 }
 
+// -------------------------------- uploads image ---------------------------------------
+
+const uploadImage = async (req, res) => { 
+
+  console.log(req)
+
+  if (!req.file) return res.status(400).json({ message: 'Aucun fichier reçu' })
+
+  try {
+    const saved = await srv.saveImageRecord(req.file)
+    const url = req.protocol + '://' + req.get('host') + '/' + saved.path
+    res.status(201).json({ message: 'Image uploadée avec succès', data: { ...saved, url } })
+  } catch (error) {
+    res.status(500).json({ message: `une erreur est survenue_controlleur: ${error.message}` })
+  }
+}
 module.exports ={ 
   
   checkDataCreat,

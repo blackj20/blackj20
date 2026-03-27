@@ -20,7 +20,7 @@ router.post('/actualite', actualite, (req, res) => {
 router.post('/annonce', annonce, (req, res) => {
   res.status(200).json({ message: 'annonce cree avec succes', data: req.body })
 })
-router.post('/upload-image', upload.single('image'), uploadImage)
+router.post('/upload-image', uploadImage,upload.single('image'))
 
 module.exports = router
 

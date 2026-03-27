@@ -116,7 +116,7 @@ const poste=(data_api,parent="",ClassName="item",info_div="active")=>{
 const loadindingImg=(data_realis)=>{// on cree des poste en boucle
 
     
-    api_realisation.forEach(realis => {
+   data_realis.forEach(realis => {
        poste(realis,"realisation-container") 
        
     });

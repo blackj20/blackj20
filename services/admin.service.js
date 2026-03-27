@@ -4,10 +4,13 @@ const multer = require('multer')
 const db = require('../config/init')
 
 // -------------------- stockage des images --------------------
+
 const storage = multer.diskStorage({
   destination: (req, file, cb) => {
     const uploadDir = path.join(process.cwd(), 'uploads')
+    console.log( "image deplace dans uploads")
     fs.mkdir(uploadDir, { recursive: true }, (err) => {
+      if(err) console.log("erreur lors du uploads",err)
       cb(err, 'uploads')
     })
   },
@@ -19,7 +22,6 @@ const storage = multer.diskStorage({
 
 const upload = multer({ storage })
 
-console.log('uploads')
 
 const saveImageRecord = (file) => {
   if (!file) return Promise.reject('aucun fichier fourni')
@@ -141,7 +143,14 @@ function logPageView(req, res, next) {
     next()
   })
 }
-
+allImage=()=>{
+    db.all(`select * from images`,[],(err,rows)=>{
+      if(err) return console.log ("oups :",err)
+      if(rows.length===0) console.log("not image yet")
+      console.log(rows)
+    })
+}
+allImage()
 module.exports = {
   upload,
   saveImageRecord,
