@@ -1,10 +1,7 @@
 const data_img = document.getElementById('img')
-
-// formaTdata=(data)=>{
-//     elem = new formatData(data)
-//     return console.log(Object(data))
-// }
-
+const data_realis =  document.getElementById('realosation')
+const data_act = document.getElementById('actualite')
+const data_annonce = document.getElementById('annonce')
 
 const uploadImg = async () => {
   try {
@@ -25,7 +22,10 @@ const uploadImg = async () => {
   } catch (err) {
     alert(err)
   }
-} // front
+} 
+
+  
+
 
 data_img.addEventListener("submit",(e)=>{
     e.preventDefault()

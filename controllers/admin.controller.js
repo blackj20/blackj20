@@ -78,7 +78,9 @@ const auth = (req, res, next) => {
     return res.status(403).json({ message: 'invalid or expired token' + err })
   }
 }
+
 // ------------------------------ admin --------------------------
+
 const isAdmin = (req, res, next) => {
   if (!req.body.user.role === 'admin') res.status(403).json({ message: 'page reserve au admins .' })
   next()
@@ -101,7 +103,6 @@ const checkCoockie = (req, res, next) => {
 
 const uploadImage = async (req, res) => {// controller
 
-  console.log(req.body)
 
   if (!req.file) {
     return res.status(400).json({ message: 'Aucun fichier reçu' })

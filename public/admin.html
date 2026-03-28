@@ -37,58 +37,86 @@
         <div class="formilaire"> 
 
     
-             <form id="img" enctype="multipart/form-data">
-                <input type="file" name="image" required/>
-                <button type="submit" class="ok">Upload</button>   
-            </form>  
+             
+             <form id="img" enctype="multipart/form-data" > 
+
+                <h3>uploads image</h3>
+                 
+                 <div class="enter">
+                     <input type="file"  required="identifen" name="image">
+                 </div>
+                 <div class="enter">
+                     <input type="text"  required="identifen"  name="description">
+                     <label form="description">description</label>
+                 </div>
+                 
+                 
+                 <input type="submit" value="uploads" class="ok" id="ok" data-btn="login" >
+                 
+             </form> 
         
             <form id="realisation">
+                <h3>uploads realisation</h3>
                 <div class="enter">
-                    <input type="text" name="anneé">
+                    <input type="text" name="anneé" required>
                     <label form="anneé">anneé</label>
-                    <input type="text" name="localisation">
-                    <label form="localisation">localisation</label>
-                    <input type="text" name="titre">
-                    <label form="titre">titre</label>
-                    <input type="text" name="description">
-                    <label form="description">description</label>
-                    <input type="text" name="image">
-                    <label form="image">image</label>
-    
-            
-                    <button type="submit" class="ok">Upload</button> 
                 </div>
-                  
+                <div class="enter">
+                     <input type="text" name="localisation" required>
+                    <label form="localisation">localisation</label>
+                </div>
+                <div class="enter">
+                    <input type="text" name="titre" required>
+                    <label form="titre">titre</label>
+                </div>
+                <div class="enter">
+                    <input type="text" name="description" required>
+                    <label form="description">description</label>
+                </div>
+                 <div class="enter">
+                    <input type="text" name="image" required>
+                    <label form="image">image</label>
+                </div>
+                  <button type="submit" class="ok">Upload</button>                       
             </form> 
         
             <form id="actualite">
+                <h3>uploads actualités</h3>
                  <div class="enter">
-                    <input type="text" name="titre">
+                    <input type="text" name="titre" required>
                     <label form="titre">titre</label>
-                    <input type="text" name="description">
-                    <label form="description">description</label>
-                    <input type="text" name="image">
-                    <label form="image">image</label>
-    
-                    <button type="submit" class="ok">Upload</button>  
-                 </div>
-            </form> 
+                </div>
+                 <div class="enter">
+                    <input type="text" name="description" required>
+                    <label form="description">description</label>  
+                </div>
+                 <div class="enter">
+                    <input type="text" name="description" required>
+                    <label form="description">description</label>   
+                </div>
+                 <div class="enter">
+                   <input type="text" name="image" required>
+                   <label form="image">image</label>   
+                </div>
+                <button type="submit" class="ok">Upload</button>  
+                 
+            </form>
     
             <form id="annonce">
-                
+                <h3>uploads annonce</h3>
                  <div class="enter">
-                    <input type="text" name="titre">
+                    <input type="text" name="titre" required>
                     <label form="titre">titre</label>
-                    <input type="text" name="message">
+                </div>
+                 <div class="enter">
+                    <input type="text" name="message" required>
                     <label form="message">message</label>
-                    <button type="submit" class="ok" >Upload</button>
-                </div>  
+                </div>
+                <button type="submit" class="ok" >Upload</button>
             </form> 
         </div>
     
-      
 
-   
     </main>
     <footer class="site-footer">
         <div class="footer-social">
@@ -99,12 +127,6 @@
             <a class="footer-social-link" href="about.html" aria-label="LinkedIn"><i class="fab fa-whatsapp"></i></a>
         </div>
 
-        <div class="footer-links">
-            <a class="footer-link" href="actualiter.html">actualités</a>
-            <a class="footer-link" href="realisation.html">réalisations</a>
-            <a class="footer-link" href="service.html">services</a>
-            <a class="footer-link" href="about.html">à propos</a>
-        </div>
 
         <p class="footer-copy">© 2024 EMC Construction. Tous droits réservés.</p>
     </footer>
