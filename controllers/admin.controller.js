@@ -1,6 +1,12 @@
 
 
 const srv = require('../services/admin.service')
+const TARGETS = {
+  actualite: 'actualite',
+  realisation: 'realisation',
+  annonce: 'annonce',
+  images: 'images'
+}
 
 const realisation = async (req, res) => {
   try {
@@ -125,8 +131,40 @@ const uploadImage = async (req, res) => {// controller
     })
   }
 }
-module.exports ={ 
-  
+
+// -------------------------------- listes ---------------------------------------
+const listElements = (table) => async (req, res) => {
+  try {
+    const data = await srv.getAllElement(table)
+    res.json(data)
+  } catch (error) {
+    res.status(500).json({ message: 'erreur lors de la récupération des données', error: error.message })
+  }
+}
+
+// -------------------------------- edition ---------------------------------------
+const updateElement = (table) => async (req, res) => {
+  const { id } = req.params
+  try {
+    const result = await srv.editElem(table, id, req.body)
+    res.json({ message: 'Mise à jour effectuée', result })
+  } catch (error) {
+    res.status(500).json({ message: 'erreur lors de la mise à jour', error: error.message })
+  }
+}
+
+// -------------------------------- suppression -----------------------------------
+const deleteElement = (table) => async (req, res) => {
+  const { id } = req.params
+  try {
+    const result = await srv.deleteElem(table, id)
+    res.json({ message: 'élément supprimé', result })
+  } catch (error) {
+    res.status(500).json({ message: 'erreur lors de la suppression', error: error.message })
+  }
+}
+
+module.exports = {
   checkDataCreat,
   auth,
   logincheck,
@@ -135,5 +173,9 @@ module.exports ={
   actualite,
   annonce,
   uploadImage,
-  checkCoockie
- }
+  checkCoockie,
+  listElements,
+  updateElement,
+  deleteElement,
+  TARGETS
+}

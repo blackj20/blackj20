@@ -45,6 +45,18 @@ const saveImageRecord = (file) => {//service
 
 // -------------------- actualité / réalisation / annonce --------------------
 
+const TABLE_CONFIG = {
+  actualite: ['titre', 'description', 'image'],
+  realisation: ['anneé', 'localisation', 'titre', 'description', 'image'],
+  annonce: ['titre', 'message'],
+  images: ['filename', 'path']
+}
+
+const ensureTableAllowed = (table) => {
+  if (!TABLE_CONFIG[table]) throw new Error(`Table non autorisée: ${table}`)
+  return table
+}
+
 const creeUnactualiter = ({ titre, description, image }) => {
   return new Promise((resolve, reject) => {
     const query = 'insert into actualite (titre,description,image) values(?,?,?)'
@@ -52,10 +64,10 @@ const creeUnactualiter = ({ titre, description, image }) => {
       if (err) return reject('une erreur se produit ' + err)
 
       resolve({
+        id: this.lastID,
         titre,
         description,
-        image,
-        index: this.lastID
+        image
       })
     })
   })
@@ -69,28 +81,27 @@ const creeUnrealisation = ({ anneé, annee, titre, description, localisation, im
       if (err) return reject('une erreur se produit ' + err)
 
       resolve({
+        id: this.lastID,
         anneé: yearValue,
         titre,
         description,
         localisation,
-        image,
-        index: this.lastID
+        image
       })
     })
   })
 }
 
-const creeUnannonce = ({ annee, titre, message }) => {
+const creeUnannonce = ({ titre, message }) => {
   return new Promise((resolve, reject) => {
-    const query = 'insert into annonce (anneé,titre,message) values(?,?,?)'
-    db.run(query, [annee, titre, message], function (err) {
+    const query = 'insert into annonce (titre,message) values(?,?)'
+    db.run(query, [titre, message], function (err) {
       if (err) return reject('une erreur se produit ' + err)
 
       resolve({
+        id: this.lastID,
         titre,
-        annee,
-        message,
-        index: this.lastID
+        message
       })
     })
   })
@@ -98,11 +109,13 @@ const creeUnannonce = ({ annee, titre, message }) => {
 
 // -------------------- autres actions admin --------------------
 const getAllElement = (target) => {
-  const query = `select * from ${target}`
+  const table = ensureTableAllowed(target)
+  const selectId = table === 'annonce' ? 'rowid as id, *' : '*'
+  const query = `select ${selectId} from ${table}`
   return new Promise((resolve, reject) => {
     db.all(query, function (err, rows) {
       if (err) return reject('une erreur se produit ' + err)
-      if (!rows || rows.length === 0) return resolve('pas encore d\'element dans la base de donnés')
+      if (!rows || rows.length === 0) return resolve([])
       resolve(rows)
     })
   })
@@ -121,13 +134,34 @@ const getElement = (take, target) => {
 }
 
 // =========================== modifier ====================================
-const editElem = (target, element) => {
-  const { username, phone, email } = element
-  const query = 'update from users set titre=? description=?  anne=? where=? '
+const editElem = (target, id, element) => {
+  const table = ensureTableAllowed(target)
+  const allowedCols = TABLE_CONFIG[table]
+  const updates = allowedCols.filter((c) => element[c] !== undefined)
+
+  if (updates.length === 0) {
+    return Promise.resolve({ changed: 0 })
+  }
+
+  const setClause = updates.map((c) => `${c}=?`).join(', ')
+  const key = table === 'annonce' ? 'rowid' : 'id'
+  const values = updates.map((c) => element[c])
+
   return new Promise((resolve, reject) => {
-    db.run(query, [username, phone, email, target], function (err) {
+    db.run(`update ${table} set ${setClause} where ${key}=?`, [...values, id], function (err) {
       if (err) return reject('une erreur se produit:  ' + err)
-      resolve()
+      resolve({ changed: this.changes })
+    })
+  })
+}
+
+const deleteElem = (target, id) => {
+  const table = ensureTableAllowed(target)
+  const key = table === 'annonce' ? 'rowid' : 'id'
+  return new Promise((resolve, reject) => {
+    db.run(`delete from ${table} where ${key}=?`, [id], function (err) {
+      if (err) return reject('une erreur se produit:  ' + err)
+      resolve({ deleted: this.changes })
     })
   })
 }
@@ -162,5 +196,6 @@ module.exports = {
   getAllElement,
   getElement,
   editElem,
+  deleteElem,
   logPageView
 }

@@ -18,9 +18,9 @@ const server_api=async(req,res)=>{
             }
             break
         case "actualites":
-           
+        case "actualite":
             try {
-                const actualitesData =await getAllElement("actualites")
+                const actualitesData =await getAllElement("actualite")
                 res.json(actualitesData)
             } catch (err) {
                res.status(500).json({ message: "une erreur se produit "+err })

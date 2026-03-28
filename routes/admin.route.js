@@ -1,7 +1,7 @@
 const express = require('express')
 const router = express.Router()
 const path = require('path')
-const { realisation, actualite, annonce, uploadImage } = require('../controllers/admin.controller')
+const { realisation, actualite, annonce, uploadImage, listElements, updateElement, deleteElement, TARGETS } = require('../controllers/admin.controller')
 const { upload } = require('../services/admin.service')
 
 // ================= get routre ==============================
@@ -20,8 +20,24 @@ router.post('/actualite', actualite, (req, res) => {
 router.post('/annonce', annonce, (req, res) => {
   res.status(200).json({ message: 'annonce cree avec succes', data: req.body })
 })
-router.post('/upload-image', upload.single('image'),uploadImage)
+router.post('/upload-image', upload.single('image'), uploadImage)
+
+// =============================get routes ========================
+router.get('/images', listElements(TARGETS.images))
+router.get('/realisation', listElements(TARGETS.realisation))
+router.get('/actualite', listElements(TARGETS.actualite))
+router.get('/annonce', listElements(TARGETS.annonce))
+
+// ============================= put routes ========================
+router.put('/realisation/:id', updateElement(TARGETS.realisation))
+router.put('/actualite/:id', updateElement(TARGETS.actualite))
+router.put('/annonce/:id', updateElement(TARGETS.annonce))
+
+// ============================= delete routes =====================
+router.delete('/realisation/:id', deleteElement(TARGETS.realisation))
+router.delete('/actualite/:id', deleteElement(TARGETS.actualite))
+router.delete('/annonce/:id', deleteElement(TARGETS.annonce))
+router.delete('/images/:id', deleteElement(TARGETS.images))
 
 module.exports = router
-
 

@@ -1,141 +1,172 @@
+<!DOCTYPE html>
 <html lang="fr">
-
-
-<!-- nom de l'entreprise EMC construction  -->
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="css/global.css">
-    <link rel="stylesheet" href="css/admin.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
-    
-   
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>EMC | Administration</title>
+  <link rel="stylesheet" href="css/global.css">
+  <link rel="stylesheet" href="css/admin.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
 </head>
-<body>
-    <header>
-        <div class="logo">
-            <img src="image/logo.png" alt="le logo de l'entreprise">
-        </div>
+<body class="admin-body">
+  <header class="admin-header">
+    <div class="brand">
+      <img src="image/logo.png" alt="EMC Construction" class="logo">
+      <div>
+        <p class="kicker">Tableau de bord</p>
+        <h1>Administration EMC</h1>
+      </div>
+    </div>
+    <nav class="admin-nav">
+      <a href="/" class="pill">Retour au site</a>
+    </nav>
+  </header>
 
-        <input type="checkbox" id="nav-toggle" class="nav-toggle" aria-label="Ouvrir le menu" />
-        <label for="nav-toggle" class="nav-toggle-label" aria-label="Navigation">
-            <span></span>
+  <main class="admin-main">
+    <section class="card hero">
+      <div>
+        <p class="kicker">Pilotez votre vitrine</p>
+        <h2>Uploads, actualités, réalisations, annonces</h2>
+        <p>Ajoutez, modifiez ou supprimez vos contenus sans quitter ce tableau. Chaque section enregistre directement via les routes <code>/admin</code>.</p>
+      </div>
+      <div class="metrics">
+        <div class="metric"><span id="imageCount">0</span><small>Images</small></div>
+        <div class="metric"><span id="realCount">0</span><small>Réalisations</small></div>
+        <div class="metric"><span id="actuCount">0</span><small>Actualités</small></div>
+        <div class="metric"><span id="annonceCount">0</span><small>Annonces</small></div>
+      </div>
+    </section>
+
+    <section class="card" id="images">
+      <div class="card-head">
+        <div>
+          <p class="kicker">Médias</p>
+          <h3>Uploader des images</h3>
+        </div>
+        <span class="badge">Stock</span>
+      </div>
+      <form id="imageForm" class="form-grid" enctype="multipart/form-data">
+        <label class="field">
+          <span>Image</span>
+          <input type="file" name="image" required accept="image/*">
         </label>
+        <button type="submit" class="btn primary">Envoyer</button>
+      </form>
+      <div class="gallery" id="imageGallery"></div>
+    </section>
 
-        <nav>
-            <ul>
-                <li><a href="actualiter.html">actualités</a></li>
-                <li><a href="realisation.html">réalisations</a></li>
-                <li><a href="service.html">services</a></li>
-                <li><a href="about.html">à propos</a></li>
-                
-            </ul>
-        </nav>
-    </header>
-
-    <main>
-        <div class="formilaire"> 
-
-    
-             
-             <form id="img" enctype="multipart/form-data" > 
-
-                <h3>uploads image</h3>
-                 
-                 <div class="enter">
-                     <input type="file"  required="identifen" name="image">
-                 </div>
-                 <div class="enter">
-                     <input type="text"  required="identifen"  name="description">
-                     <label form="description">description</label>
-                 </div>
-                 
-                 
-                 <input type="submit" value="uploads" class="ok" id="ok" data-btn="login" >
-                 
-             </form> 
-        
-            <form id="realisation">
-                <h3>uploads realisation</h3>
-                <div class="enter">
-                    <input type="text" name="anneé" required>
-                    <label form="anneé">anneé</label>
-                </div>
-                <div class="enter">
-                     <input type="text" name="localisation" required>
-                    <label form="localisation">localisation</label>
-                </div>
-                <div class="enter">
-                    <input type="text" name="titre" required>
-                    <label form="titre">titre</label>
-                </div>
-                <div class="enter">
-                    <input type="text" name="description" required>
-                    <label form="description">description</label>
-                </div>
-                 <div class="enter">
-                    <input type="text" name="image" required>
-                    <label form="image">image</label>
-                </div>
-                  <button type="submit" class="ok">Upload</button>                       
-            </form> 
-        
-            <form id="actualite">
-                <h3>uploads actualités</h3>
-                 <div class="enter">
-                    <input type="text" name="titre" required>
-                    <label form="titre">titre</label>
-                </div>
-                 <div class="enter">
-                    <input type="text" name="description" required>
-                    <label form="description">description</label>  
-                </div>
-                 <div class="enter">
-                    <input type="text" name="description" required>
-                    <label form="description">description</label>   
-                </div>
-                 <div class="enter">
-                   <input type="text" name="image" required>
-                   <label form="image">image</label>   
-                </div>
-                <button type="submit" class="ok">Upload</button>  
-                 
-            </form>
-    
-            <form id="annonce">
-                <h3>uploads annonce</h3>
-                 <div class="enter">
-                    <input type="text" name="titre" required>
-                    <label form="titre">titre</label>
-                </div>
-                 <div class="enter">
-                    <input type="text" name="message" required>
-                    <label form="message">message</label>
-                </div>
-                <button type="submit" class="ok" >Upload</button>
-            </form> 
+    <section class="card" id="realisation">
+      <div class="card-head">
+        <div>
+          <p class="kicker">Réalisations</p>
+          <h3 id="realisationLegend" data-default="Ajouter une réalisation" data-label="une réalisation">Ajouter une réalisation</h3>
         </div>
-    
+        <span class="badge">CRUD</span>
+      </div>
+      <form id="realisationForm" class="form-grid">
+        <label class="field">
+          <span>Année</span>
+          <input type="text" name="annee" placeholder="2024" required>
+        </label>
+        <label class="field">
+          <span>Localisation</span>
+          <input type="text" name="localisation" placeholder="Kinshasa" required>
+        </label>
+        <label class="field">
+          <span>Titre</span>
+          <input type="text" name="titre" placeholder="Projet X" required>
+        </label>
+        <label class="field">
+          <span>Description</span>
+          <input type="text" name="description" placeholder="Quelques mots" required>
+        </label>
+        <label class="field">
+          <span>Image (URL ou nom)</span>
+          <input type="text" name="image" placeholder="uploads/xxx.jpg" required>
+        </label>
+        <button type="submit" class="btn primary">Enregistrer</button>
+      </form>
+      <div class="table-wrap">
+        <table class="data-table">
+          <thead>
+            <tr>
+              <th>Année</th><th>Localisation</th><th>Titre</th><th>Description</th><th>Image</th><th></th>
+            </tr>
+          </thead>
+          <tbody id="realisationBody"></tbody>
+        </table>
+      </div>
+    </section>
 
-    </main>
-    <footer class="site-footer">
-        <div class="footer-social">
-            <a class="footer-social-link" href="actualiter.html" aria-label="Facebook"><i class="fab fa-facebook-f"></i></a>
-            <a class="footer-social-link" href="realisation.html" aria-label="Twitter"><i class="fab fa-tiktok"></i></a>
-            <a class="footer-social-link" href="service.html" aria-label="Instagram"><i class="fab fa-instagram"></i></a>
-            <a class="footer-social-link" href="about.html" aria-label="LinkedIn"><i class="fab fa-youtube"></i></a>
-            <a class="footer-social-link" href="about.html" aria-label="LinkedIn"><i class="fab fa-whatsapp"></i></a>
+    <section class="card" id="actualite">
+      <div class="card-head">
+        <div>
+          <p class="kicker">Actualités</p>
+          <h3 id="actualiteLegend" data-default="Ajouter une actualité" data-label="une actualité">Ajouter une actualité</h3>
         </div>
+        <span class="badge">CRUD</span>
+      </div>
+      <form id="actualiteForm" class="form-grid">
+        <label class="field">
+          <span>Titre</span>
+          <input type="text" name="titre" required>
+        </label>
+        <label class="field">
+          <span>Description</span>
+          <input type="text" name="description" required>
+        </label>
+        <label class="field">
+          <span>Image (URL ou nom)</span>
+          <input type="text" name="image" required>
+        </label>
+        <button type="submit" class="btn primary">Enregistrer</button>
+      </form>
+      <div class="table-wrap">
+        <table class="data-table">
+          <thead>
+            <tr>
+              <th>Titre</th><th>Description</th><th>Image</th><th></th>
+            </tr>
+          </thead>
+          <tbody id="actualiteBody"></tbody>
+        </table>
+      </div>
+    </section>
 
+    <section class="card" id="annonce">
+      <div class="card-head">
+        <div>
+          <p class="kicker">Annonces</p>
+          <h3 id="annonceLegend" data-default="Créer une annonce" data-label="une annonce">Créer une annonce</h3>
+        </div>
+        <span class="badge">CRUD</span>
+      </div>
+      <form id="annonceForm" class="form-grid">
+        <label class="field">
+          <span>Titre</span>
+          <input type="text" name="titre" required>
+        </label>
+        <label class="field">
+          <span>Message</span>
+          <input type="text" name="message" required>
+        </label>
+        <button type="submit" class="btn primary">Enregistrer</button>
+      </form>
+      <div class="table-wrap">
+        <table class="data-table">
+          <thead>
+            <tr>
+              <th>Titre</th><th>Message</th><th>Créé le</th><th></th>
+            </tr>
+          </thead>
+          <tbody id="annonceBody"></tbody>
+        </table>
+      </div>
+    </section>
+  </main>
 
-        <p class="footer-copy">© 2024 EMC Construction. Tous droits réservés.</p>
-    </footer>
-    <script src="js/admin.js"></script>
-    
+  <div id="toast"></div>
+
+  <script src="js/admin.js"></script>
 </body>
 </html>
-
-
-
-
-
