@@ -32,12 +32,21 @@ db.serialize(() => {
         path TEXT NOT NULL,
         created_at datetime default current_timestamp
     )`)
+    db.run(`CREATE TABLE IF NOT EXISTS image_views (
+        image_id INTEGER UNIQUE,
+        views INTEGER DEFAULT 0,
+        FOREIGN KEY(image_id) REFERENCES images(id)
+    )`)
      db.run(`CREATE TABLE IF NOT EXISTS visiteur (
         date text NOT NULL,
         page text NOT NULL,
         visiteur integer,
         created_at datetime default current_timestamp
         
+    )`)
+    db.run(`CREATE TABLE IF NOT EXISTS visitor_session (
+        uid TEXT PRIMARY KEY,
+        first_seen datetime default current_timestamp
     )`)
     db.run(`CREATE TABLE IF NOT EXISTS annonce (
         titre text NOT NULL,

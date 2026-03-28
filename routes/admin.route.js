@@ -1,7 +1,7 @@
 const express = require('express')
 const router = express.Router()
 const path = require('path')
-const { realisation, actualite, annonce, uploadImage, listElements, updateElement, deleteElement, TARGETS } = require('../controllers/admin.controller')
+const { realisation, actualite, annonce, uploadImage, listElements, updateElement, deleteElement, TARGETS, getStats } = require('../controllers/admin.controller')
 const { upload } = require('../services/admin.service')
 
 // ================= get routre ==============================
@@ -27,6 +27,7 @@ router.get('/images', listElements(TARGETS.images))
 router.get('/realisation', listElements(TARGETS.realisation))
 router.get('/actualite', listElements(TARGETS.actualite))
 router.get('/annonce', listElements(TARGETS.annonce))
+router.get('/stats', getStats)
 
 // ============================= put routes ========================
 router.put('/realisation/:id', updateElement(TARGETS.realisation))
@@ -40,4 +41,3 @@ router.delete('/annonce/:id', deleteElement(TARGETS.annonce))
 router.delete('/images/:id', deleteElement(TARGETS.images))
 
 module.exports = router
-

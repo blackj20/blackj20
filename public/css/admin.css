@@ -245,6 +245,37 @@ h1 {
   word-break: break-word;
 }
 
+.top-images {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: grid;
+  gap: 10px;
+}
+
+.top-images li {
+  display: grid;
+  grid-template-columns: auto 1fr auto;
+  align-items: center;
+  gap: 12px;
+  padding: 10px;
+  background: rgba(255,255,255,0.03);
+  border: 1px solid rgba(255,255,255,0.06);
+  border-radius: 10px;
+}
+
+.top-images img {
+  width: 64px;
+  height: 64px;
+  object-fit: cover;
+  border-radius: 8px;
+}
+
+.top-images .views {
+  color: var(--accent-2);
+  font-weight: 600;
+}
+
 #toast {
   position: fixed;
   left: 50%;
@@ -270,4 +301,12 @@ h1 {
   .hero { grid-template-columns: 1fr; }
   .admin-header { flex-direction: column; align-items: flex-start; gap: 8px; }
   .data-table td.actions { flex-direction: column; }
+}
+
+@media (max-width: 600px) {
+  .admin-main { padding: 16px; }
+  .card { padding: 16px; }
+  .form-grid { grid-template-columns: 1fr; }
+  .data-table th, .data-table td { font-size: 13px; }
+  .metric span { font-size: 22px; }
 }

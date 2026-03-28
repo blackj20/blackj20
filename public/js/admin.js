@@ -29,8 +29,11 @@ const counters = {
   images: qs('#imageCount'),
   realisation: qs('#realCount'),
   actualite: qs('#actuCount'),
-  annonce: qs('#annonceCount')
+  annonce: qs('#annonceCount'),
+  visitors: qs('#visitCount')
 }
+
+const topImagesList = qs('#topImages')
 
 const toast = qs('#toast')
 
@@ -85,6 +88,13 @@ const handleImageSubmit = async (e) => {
 
 // -------------- Helpers -----------------
 const serializeForm = (form) => Object.fromEntries(new FormData(form).entries())
+
+const uploadAndGetUrl = async (file) => {
+  const fd = new FormData()
+  fd.append('image', file)
+  const res = await fetchJSON(`${API_BASE}/upload-image`, { method: 'POST', body: fd })
+  return res?.data?.url || res?.data?.path || ''
+}
 
 const resetEditMode = (type) => {
   state.editing[type] = null
@@ -143,6 +153,10 @@ const loadRealisations = async () => {
 const handleRealSubmit = async (e) => {
   e.preventDefault()
   const payload = serializeForm(forms.realisation)
+  if (forms.realisation.imageFile?.files?.[0]) {
+    payload.image = await uploadAndGetUrl(forms.realisation.imageFile.files[0])
+  }
+  delete payload.imageFile
   const id = state.editing.realisation
   const method = id ? 'PUT' : 'POST'
   const url = `${API_BASE}/realisation${id ? `/${id}` : ''}`
@@ -170,6 +184,10 @@ const loadActualites = async () => {
 const handleActuSubmit = async (e) => {
   e.preventDefault()
   const payload = serializeForm(forms.actualite)
+  if (forms.actualite.imageFile?.files?.[0]) {
+    payload.image = await uploadAndGetUrl(forms.actualite.imageFile.files[0])
+  }
+  delete payload.imageFile
   const id = state.editing.actualite
   const method = id ? 'PUT' : 'POST'
   const url = `${API_BASE}/actualite${id ? `/${id}` : ''}`
@@ -259,6 +277,26 @@ const handleTableClick = (e) => {
   if (btn.classList.contains('action-delete')) return handleDeleteClick(type, id)
 }
 
+// -------------- Stats -----------------
+const loadStats = async () => {
+  const data = await fetchJSON(`${API_BASE}/stats`)
+  counters.visitors.textContent = data.visitors ?? 0
+  if (!topImagesList) return
+  topImagesList.innerHTML = (data.topImages || [])
+    .map((img, idx) => `
+      <li>
+        <img src="/${img.path}" alt="${img.filename}">
+        <div>
+          <span class="badge">#${idx + 1}</span><br>
+          <strong>${img.filename}</strong><br>
+          <small>${img.path}</small>
+        </div>
+        <span class="views">${img.views || 0} vues</span>
+      </li>
+    `)
+    .join('') || '<li class="muted">Pas encore de vues</li>'
+}
+
 // -------------- Init -----------------
 const init = () => {
   forms.image?.addEventListener('submit', handleImageSubmit)
@@ -269,7 +307,7 @@ const init = () => {
   qsa('tbody').forEach((tbody) => tbody.addEventListener('click', handleTableClick))
   lists.images?.addEventListener('click', handleTableClick)
 
-  Promise.all([loadImages(), loadRealisations(), loadActualites(), loadAnnonces()]).catch((err) => showToast(err.message, 'error'))
+  Promise.all([loadImages(), loadRealisations(), loadActualites(), loadAnnonces(), loadStats()]).catch((err) => showToast(err.message, 'error'))
 }
 
 document.addEventListener('DOMContentLoaded', init)

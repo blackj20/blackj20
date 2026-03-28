@@ -121,6 +121,32 @@ const getAllElement = (target) => {
   })
 }
 
+// -------------------- stats --------------------
+const countVisitors = () => {
+  return new Promise((resolve, reject) => {
+    db.get('SELECT COUNT(*) as total FROM visitor_session', (err, row) => {
+      if (err) return reject(err)
+      resolve(row?.total || 0)
+    })
+  })
+}
+
+const topImages = (limit = 5) => {
+  return new Promise((resolve, reject) => {
+    const query = `
+      SELECT images.id, images.filename, images.path, IFNULL(image_views.views,0) as views
+      FROM images
+      LEFT JOIN image_views ON images.id = image_views.image_id
+      ORDER BY views DESC
+      LIMIT ?
+    `
+    db.all(query, [limit], (err, rows) => {
+      if (err) return reject(err)
+      resolve(rows)
+    })
+  })
+}
+
 // ========================================== recupere par choix ===================
 const getElement = (take, target) => {
   const query = `select * from ${take} where username=? or phone=? or email=? `
@@ -197,5 +223,7 @@ module.exports = {
   getElement,
   editElem,
   deleteElem,
+  countVisitors,
+  topImages,
   logPageView
 }

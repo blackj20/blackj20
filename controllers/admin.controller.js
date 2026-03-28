@@ -164,6 +164,17 @@ const deleteElement = (table) => async (req, res) => {
   }
 }
 
+// -------------------------------- stats ---------------------------------------
+const getStats = async (req, res) => {
+  try {
+    const visitors = await srv.countVisitors()
+    const topImages = await srv.topImages(5)
+    res.json({ visitors, topImages })
+  } catch (error) {
+    res.status(500).json({ message: 'erreur lors de la récupération des stats', error: error.message })
+  }
+}
+
 module.exports = {
   checkDataCreat,
   auth,
@@ -177,5 +188,6 @@ module.exports = {
   listElements,
   updateElement,
   deleteElement,
-  TARGETS
+  TARGETS,
+  getStats
 }

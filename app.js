@@ -5,12 +5,14 @@ const app = express()
 const cors = require('cors')
 const { statsMiddleware_ } = require('./middleware/stat.middleware')
 const { trafique } = require('./middleware/global.middleware')
+const { ensureVisitor, incrementImageView } = require('./middleware/visitor.middleware')
 
 app.use(trafique)
+app.use(ensureVisitor)
 // app.use(statsMiddleware_)
 
+app.use('/uploads', incrementImageView, express.static('uploads'))
 app.use(express.static('public'))
-app.use('/uploads', express.static('uploads'))
 app.use(cors())
 app.use(express.json())
 
