@@ -1,0 +1,127 @@
+
+
+form{ /* le formulaire  */ 
+    
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    width: 300px;
+    text-align: center;
+    padding: 15px;
+    padding-top:50px ;
+    border-radius: 25px ;
+    box-shadow: 0px 0px 30px rgb(7, 8, 8);
+}
+form input{
+    font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
+    text-align:  center;
+    border: none;
+    border-radius: 15px;
+    color: #fff;
+    height: 40px;
+    background-color: rgba(48, 164, 203, 0.413);
+    /* box-shadow: 1px 1px 1px rgb(240, 244, 245); */ 
+}
+form .ok {
+    align-self: center;
+    width: 78px;
+    background-color:transparent;
+}
+/*  on attaque cote hover mouse  */
+
+
+form .ok:hover{
+    transition: 1s;
+    align-self: center;
+    font-family: Verdana, Geneva, Tahoma, sans-serif;
+    width: 150px;
+    background-color: rgba(25, 181, 224, 0.956);
+    box-shadow: 0px 1px 1px rgb(231, 244, 244); 
+}
+form input:hover{
+   transition: 1s;
+   box-shadow: 0px 1px 2px rgb(252, 253, 253); 
+}
+header{
+    margin-bottom: 50px;
+}
+.enter input{
+    width: 100%;
+    padding: 8px 5px;
+    border: 1px solid black;
+    outline: none;
+    border-radius: 8px;
+    background-color: transparent;
+    border: none;
+}
+.enter {
+    display: flex;
+    flex-direction: column;
+    position: relative;
+    font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
+    text-align:  center;
+    border: none;
+    border-radius: 15px;
+    color: #fff;
+    height: 40px;
+    background-color: rgba(48, 164, 203, 0.413);
+
+}
+.enter label{
+
+    position: absolute;
+    top: 5px; /* position du label dans le input  */
+    left: 10px;
+    color: rgb(255, 255, 255);
+    transition: 508ms;  /* la transition du label */ 
+    font-family: 'Times New Roman', Times, serif;
+}
+
+.enter input:focus+label,
+.enter input:valid+label{
+    top: -9px;
+    color: rgb(7, 7, 7);
+    background-color: rgb(255, 255, 255);
+    padding: 2px 7px;
+    border-radius: 5px;
+    font-size: 13px;
+}
+
+form{
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    width: 300px;
+    text-align: center;
+    padding: 15px;
+    padding-top:50px ;
+    border-radius: 25px ;
+    box-shadow: 0px 0px 30px rgb(13, 207, 255);
+
+}
+form .ok {
+    align-self: center;
+    width: 78px;
+    background-color:transparent;
+    border: none;
+    border-radius: 15px;
+    color: #fff;
+    height: 40px;
+    align-self: center;
+    background-color: rgba(48, 164, 203, 0.413);
+}
+/*  on attaque cote hover mouse  */
+
+
+form .ok:hover{
+    transition: 1s;
+    align-self: center;
+    font-family: Verdana, Geneva, Tahoma, sans-serif;
+    width: 150px;
+    background-color: rgba(25, 181, 224, 0.956);
+    box-shadow: 0px 1px 1px rgb(231, 244, 244); 
+}
+form input:hover{
+   transition: 1s;
+   box-shadow: 0px 1px 2px rgb(252, 253, 253); 
+}

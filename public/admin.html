@@ -1,51 +1,118 @@
-<html lang="en">
+<html lang="fr">
+
+
+<!-- nom de l'entreprise EMC construction  -->
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="/css/global.css">
-    <title>admin_page</title>
+    <link rel="stylesheet" href="css/global.css">
+    <link rel="stylesheet" href="css/admin.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+    
+   
 </head>
 <body>
+    <header>
+        <div class="logo">
+            <img src="image/logo.png" alt="le logo de l'entreprise">
+        </div>
 
-    <form id="img" enctype="multipart/form-data">
-        <input type="file" name="image" required/>
-        <button type="submit">Upload</button>   
-    </form>  
+        <input type="checkbox" id="nav-toggle" class="nav-toggle" aria-label="Ouvrir le menu" />
+        <label for="nav-toggle" class="nav-toggle-label" aria-label="Navigation">
+            <span></span>
+        </label>
 
-    <form id="realisation">
-        <input type="text" name="anneé">
-        <input type="text" name="localisation">
-        <input type="text" name="titre">
-        <input type="text" name="description">
-        <input type="text" name="image">
+        <nav>
+            <ul>
+                <li><a href="actualiter.html">actualités</a></li>
+                <li><a href="realisation.html">réalisations</a></li>
+                <li><a href="service.html">services</a></li>
+                <li><a href="about.html">à propos</a></li>
+                
+            </ul>
+        </nav>
+    </header>
 
-        <button type="submit">Upload</button>   
-    </form> 
+    <main>
+        <div class="formilaire"> 
 
-    <form id="actualite">
-        <input type="text" name="titre">
-        <input type="text" name="description">
-        <input type="text" name="image">
+    
+             <form id="img" enctype="multipart/form-data">
+                <input type="file" name="image" required/>
+                <button type="submit" class="ok">Upload</button>   
+            </form>  
+        
+            <form id="realisation">
+                <div class="enter">
+                    <input type="text" name="anneé">
+                    <label form="anneé">anneé</label>
+                    <input type="text" name="localisation">
+                    <label form="localisation">localisation</label>
+                    <input type="text" name="titre">
+                    <label form="titre">titre</label>
+                    <input type="text" name="description">
+                    <label form="description">description</label>
+                    <input type="text" name="image">
+                    <label form="image">image</label>
+    
+            
+                    <button type="submit" class="ok">Upload</button> 
+                </div>
+                  
+            </form> 
+        
+            <form id="actualite">
+                 <div class="enter">
+                    <input type="text" name="titre">
+                    <label form="titre">titre</label>
+                    <input type="text" name="description">
+                    <label form="description">description</label>
+                    <input type="text" name="image">
+                    <label form="image">image</label>
+    
+                    <button type="submit" class="ok">Upload</button>  
+                 </div>
+            </form> 
+    
+            <form id="annonce">
+                
+                 <div class="enter">
+                    <input type="text" name="titre">
+                    <label form="titre">titre</label>
+                    <input type="text" name="message">
+                    <label form="message">message</label>
+                    <button type="submit" class="ok" >Upload</button>
+                </div>  
+            </form> 
+        </div>
+    
+      
+
    
+    </main>
+    <footer class="site-footer">
+        <div class="footer-social">
+            <a class="footer-social-link" href="actualiter.html" aria-label="Facebook"><i class="fab fa-facebook-f"></i></a>
+            <a class="footer-social-link" href="realisation.html" aria-label="Twitter"><i class="fab fa-tiktok"></i></a>
+            <a class="footer-social-link" href="service.html" aria-label="Instagram"><i class="fab fa-instagram"></i></a>
+            <a class="footer-social-link" href="about.html" aria-label="LinkedIn"><i class="fab fa-youtube"></i></a>
+            <a class="footer-social-link" href="about.html" aria-label="LinkedIn"><i class="fab fa-whatsapp"></i></a>
+        </div>
 
-        <button type="submit">Upload</button>   
-    </form> 
+        <div class="footer-links">
+            <a class="footer-link" href="actualiter.html">actualités</a>
+            <a class="footer-link" href="realisation.html">réalisations</a>
+            <a class="footer-link" href="service.html">services</a>
+            <a class="footer-link" href="about.html">à propos</a>
+        </div>
 
-    <form id="annonce">
-        <input type="text" name="titre">
-        <input type="text" name="message">
-      >
-
-        <button type="submit">Upload</button>   
-    </form> 
-
-
+        <p class="footer-copy">© 2024 EMC Construction. Tous droits réservés.</p>
+    </footer>
     <script src="js/admin.js"></script>
+    
 </body>
 </html>
-titre
-description
-image
+
 
 
 
