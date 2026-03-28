@@ -10,12 +10,6 @@ const routeRequette=(req,res,next)=>{ // on coute tout demmend extern
         res.status(400).json({message:"eh bein on n'est perdues ?"})
         
     }
-    // else if(data===auth[0]){
-
-    //     delete(req.body.data)
-    //     req.body.data = "realisation"
-    //     next()   
-    // }
     
     else if(req.method !== "POST"){
         res.status(400).json({message:"Ohooo on est coince?"})
@@ -27,6 +21,15 @@ const routeRequette=(req,res,next)=>{ // on coute tout demmend extern
 const trafique = (req,res,next)=>{
     const path = req.path
     const methode = req.method
+    const body= req.body
+    const file = req.file
+
+    if(body){
+        console.log(body)
+    }
+    if(file){
+        console.log(file)
+    }
     
     console.log(path)
     console.log(methode)

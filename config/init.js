@@ -39,6 +39,15 @@ db.serialize(() => {
         created_at datetime default current_timestamp
         
     )`)
+    db.run(`CREATE TABLE IF NOT EXISTS annonce (
+        titre text NOT NULL,
+        message text NOT NULL,
+        created_at datetime default current_timestamp
+        
+    )`)
+    
+    
+
 })
 
 module.exports = db
