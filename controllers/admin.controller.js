@@ -83,15 +83,7 @@ const isAdmin = (req, res, next) => {
   if (!req.body.user.role === 'admin') res.status(403).json({ message: 'page reserve au admins .' })
   next()
 }
-// ------------------------------ owner --------------------------
-const IsOwner = (req, res, next) => {
-  const user = decoded(token)
-  const auth = link(user.id)
 
-  if (!auth.id === user.id) res.status(403).json({ message: 'vous ne pouvez ni modifie ce poste ni la supprimer' })
-
-  next()
-}
 const checkCoockie = (req, res, next) => {
   const token = req.cookies.token
 
@@ -107,18 +99,29 @@ const checkCoockie = (req, res, next) => {
 
 // -------------------------------- uploads image ---------------------------------------
 
-const uploadImage = async (req, res) => { 
+const uploadImage = async (req, res) => {// controller
 
-  console.log(req)
+  console.log(req.body)
 
-  if (!req.file) return res.status(400).json({ message: 'Aucun fichier reçu' })
+  if (!req.file) {
+    return res.status(400).json({ message: 'Aucun fichier reçu' })
+  }
 
   try {
+    
     const saved = await srv.saveImageRecord(req.file)
+
     const url = req.protocol + '://' + req.get('host') + '/' + saved.path
-    res.status(201).json({ message: 'Image uploadée avec succès', data: { ...saved, url } })
+
+    res.status(201).json({
+      message: 'Image uploadée avec succès',
+      data: { ...saved, url }
+    })
+
   } catch (error) {
-    res.status(500).json({ message: `une erreur est survenue_controlleur: ${error.message}` })
+    res.status(500).json({
+      message: `erreur controller: ${error.message}`
+    })
   }
 }
 module.exports ={ 
@@ -127,7 +130,6 @@ module.exports ={
   auth,
   logincheck,
   isAdmin,
-  IsOwner,
   realisation,
   actualite,
   annonce,

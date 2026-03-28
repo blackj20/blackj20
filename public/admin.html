@@ -7,9 +7,11 @@
 </head>
 <body>
 
-    <form action="http://localhost:8080/admin/upload-image" method="POST" enctype="multipart/form-data">
-        <input type="file" name="image"/>
-        <button type="submit">Upload</button>
-    </form>
+    <form id="img" enctype="multipart/form-data">
+        <input type="file" name="image" required/>
+        <button type="submit">Upload</button>   
+    </form>  
+
+    <script src="js/admin.js"></script>
 </body>
 </html>

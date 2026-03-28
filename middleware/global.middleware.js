@@ -27,12 +27,10 @@ const routeRequette=(req,res,next)=>{ // on coute tout demmend extern
 const trafique = (req,res,next)=>{
     const path = req.path
     const methode = req.method
-    const body = req.resume
     
-
     console.log(path)
     console.log(methode)
-    console.log(body)
+   
 
     next()
 }

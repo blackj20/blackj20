@@ -23,14 +23,16 @@ const storage = multer.diskStorage({
 const upload = multer({ storage })
 
 
-const saveImageRecord = (file) => {
+const saveImageRecord = (file) => {//service
   if (!file) return Promise.reject('aucun fichier fourni')
-  const relativePath = path.join('uploads', file)
+
+  const relativePath = path.join('uploads', file.filename)
 
   return new Promise((resolve, reject) => {
-    const query = 'INSERT INTO images (filename, path) VALUES (?, ?)' // path stocke le chemin relatif
+    const query = 'INSERT INTO images (filename, path) VALUES (?, ?)'
+
     db.run(query, [file.filename, relativePath], function (err) {
-      if (err) return reject('une erreur se produit ' + err)
+      if (err) return reject(err)
 
       resolve({
         id: this.lastID,
