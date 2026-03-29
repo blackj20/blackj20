@@ -1,6 +1,6 @@
 // recuperation des donne pour les trois main page de user 
 
-const { getAllElement }= require('../services/admin.service')
+const { getAllElement, incrementImageView }= require('../services/admin.service')
   
 
 // =========================== pou eviter de diplique la meme code  ==========================
@@ -51,9 +51,27 @@ const server_api=async(req,res)=>{
     }
 }
 
-const logImageView=async(req,res)=>{
-    const { imageId }=req.body
-    console.log("image vue : "+imageId) 
+const logImageView = async (req, res) => {
+    const { imagePath, imageId } = req.body
+
+    // on attend un chemin d'image, mais on journalise l'id si jamais il est envoyé
+    console.log("image vue :", imagePath || imageId)
+
+    if (!imagePath && !imageId) {
+        return res.status(400).json({ message: "imagePath requis" })
+    }
+
+    try {
+        // le service incrémente via le chemin; si seul un id est fourni, on renvoie une erreur claire
+        if (!imagePath && imageId) {
+            return res.status(400).json({ message: "envoyez imagePath (ex: uploads/xxx.jpg)" })
+        }
+        const result = await incrementImageView(imagePath)
+        if (!result.updated) return res.status(404).json({ message: result.reason || "image introuvable" })
+        res.json({ message: "vue comptabilisée", views: result.views })
+    } catch (error) {
+        res.status(500).json({ message: "une erreur se produit " + error })
+    }
 }
 
 
