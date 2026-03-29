@@ -151,7 +151,11 @@ const topImages = (limit = 5) => {
 }
 
 // -------------------- image views --------------------
-const normalizeImagePath = (imagePath = '') => imagePath.replace(/^\/?/, '')
+const normalizeImagePath = (imagePath = '') => {
+  const cleaned = imagePath.replace(/^\/+/, '')
+  if (cleaned.startsWith('uploads/')) return cleaned
+  return `uploads/${cleaned}`
+}
 
 const incrementImageView = (imagePath) => {
   return new Promise((resolve, reject) => {

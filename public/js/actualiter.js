@@ -26,6 +26,29 @@ const getData=async()=>{//recuperaeation des donne au back
 
 getData()
 
+const viewedImages = new Set()
+const normalizeImagePath = (path = '') => {
+    try {
+        const url = new URL(path)
+        const cleaned = url.pathname.replace(/^\/+/, '')
+        return cleaned.startsWith('uploads/') ? cleaned : `uploads/${cleaned}`
+    } catch {
+        const cleaned = path.replace(/^\/+/, '')
+        return cleaned.startsWith('uploads/') ? cleaned : `uploads/${cleaned}`
+    }
+}
+
+const registerImageView = (path) => {
+    const normalized = normalizeImagePath(path)
+    if (!normalized || viewedImages.has(normalized)) return
+    viewedImages.add(normalized)
+    fetch('/api/image-view', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ imagePath: normalized })
+    }).catch(() => {})
+}
+
 const annonce =(data,parent="actualiter",className_="cart")=>{ // createur d'annonce 
     const carte_annonce=document.createElement("div")
     const titre =document.createElement("h3")
@@ -66,7 +89,9 @@ const poste=(data_api,parent="",ClassName="item",info_div="active")=>{
 
 
     titre_.textContent=titre
-    image.src=img||"image/logo.png"
+    const imgSrc = img || "image/logo.png"
+    image.src=imgSrc
+    if (img) registerImageView(imgSrc)
 
 
     descrp.textContent=data_description||"aucune description pour le moment" 

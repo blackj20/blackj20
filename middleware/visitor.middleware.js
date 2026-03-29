@@ -1,4 +1,5 @@
 const crypto = require('crypto')
+const path = require('path')
 const db = require('../config/init')
 
 const COOKIE_NAME = 'emc_uid'
@@ -41,7 +42,10 @@ const ensureVisitor = (req, res, next) => {
 const incrementImageView = (req, res, next) => {
   if (!req.path.startsWith('/uploads')) return next()
 
-  const imagePath = req.path.replace(/^\//, '')
+  // Construit le chemin exactement comme stocké en base : "uploads/filename.ext"
+  const filename = req.path.replace(/^\//, '') // => "uploads/xxx" ou "xxx" selon express
+  const imagePath = filename.startsWith('uploads') ? filename : path.join('uploads', filename)
+
   db.get('SELECT id FROM images WHERE path=?', [imagePath], (err, row) => {
     if (err || !row) return next()
     db.run(

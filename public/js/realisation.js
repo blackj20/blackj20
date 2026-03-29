@@ -27,9 +27,11 @@ const viewedImages = new Set()
 const normalizeImagePath = (path = '') => {
     try {
         const url = new URL(path)
-        return url.pathname.replace(/^\/+/, '')
+        const cleaned = url.pathname.replace(/^\/+/, '')
+        return cleaned.startsWith('uploads/') ? cleaned : `uploads/${cleaned}`
     } catch {
-        return path.replace(/^\/+/, '')
+        const cleaned = path.replace(/^\/+/, '')
+        return cleaned.startsWith('uploads/') ? cleaned : `uploads/${cleaned}`
     }
 }
 

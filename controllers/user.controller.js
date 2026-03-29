@@ -51,5 +51,10 @@ const server_api=async(req,res)=>{
     }
 }
 
+const logImageView=async(req,res)=>{
+    const { imageId }=req.body
+    console.log("image vue : "+imageId) 
+}
 
-module.exports={server_api}
+
+module.exports={server_api,logImageView}

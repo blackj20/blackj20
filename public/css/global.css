@@ -211,16 +211,18 @@ footer,
         padding: 12px;
     }
 }
+    
+
 .spinner {
     align-self: center;
     display: inline-block;
-    width: 16px;
-    height:16px;
-    border: 2px solid #f6f6f658;
+    width: 18px;
+    height: 18px;
+    border: 2px solid rgba(246, 246, 246, 0.35);
     border-top-color: #ffd70f;
     border-radius: 50%;
-    animation: spin 0.5s linear infinite;
-    margin-right: 6px;
+    animation: spin 0.6s linear infinite;
+    margin-right: 8px;
 }
 
 .spinner_message{
@@ -237,18 +239,73 @@ footer,
     align-items: center;
     justify-content: center;
     gap:8px;
-    padding: 16px 12px;
+    padding: 14px 12px;
     width: 100%;
     box-sizing: border-box;
-    position: relative;
-    top: 0;
     margin: 12px 0;
-    background: rgba(255,255,255,0.03);
-    border: 1px solid rgba(255,255,255,0.05);
+    background: rgba(255,255,255,0.04);
+    border: 1px solid rgba(255,255,255,0.08);
     border-radius: 12px;
 }
 
 .muted{
     color: #cfd3d8;
     text-align: center;
+}
+
+/* --- Barre de recherche commune ---
+   - Position: alignée à droite sur grand écran, centrée sur mobile
+   - Réutilisable: ajoutez simplement la classe .search-bar sur le conteneur,
+     .search-input sur l'input et .search-btn sur le bouton/icône.
+   - Adaptable: modifiez les variables de padding/couleurs ici pour changer le look partout.
+*/
+.search-bar{
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    justify-content: flex-end;
+    margin: 16px 0 24px;
+    width: 100%;
+}
+.search-input{
+    flex: 1 1 260px;
+    max-width: 380px;
+    height: 44px;
+    border-radius: 12px;
+    border: 1px solid rgba(255,255,255,0.18);
+    background: rgba(255,255,255,0.06);
+    color: #f6f6f6;
+    padding: 0 12px;
+    outline: none;
+}
+.search-input::placeholder{ color: rgba(246,246,246,0.6); }
+.search-btn{
+    height: 44px;
+    padding: 0 14px;
+    border-radius: 12px;
+    border: none;
+    cursor: pointer;
+    background: linear-gradient(120deg, #ffd70f, #ff9a1f);
+    color: #1a1300;
+    font-weight: 700;
+    letter-spacing: 0.01em;
+    box-shadow: 0 8px 20px rgba(255,154,31,0.25);
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+}
+.search-btn i{ pointer-events: none; }
+
+@media (max-width: 700px){
+    .search-bar{
+        justify-content: center;
+        flex-wrap: wrap;
+    }
+    .search-input{
+        flex: 1 1 100%;
+        max-width: none;
+    }
+    .search-btn{
+        width: 100%;
+    }
 }

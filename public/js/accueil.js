@@ -1,19 +1,48 @@
 
-const  Spinner=((contennaire="realisation-container")=>{
-    const body_=document.createElement("div")
+const createSpinner = (containerId = "realisation-container") => {
+    const container = document.getElementById(containerId)
+    if (!container) return null
+
+    const body_ = document.createElement("div")
     const message = document.createElement("p")
     const spinner = document.createElement("span")
     
     spinner.className="spinner"
+    message.className="spinner_message"
+    message.textContent = "Chargement..."
     body_.className="cart_spinner"
 
-    body_.append(message,spinner)
-        
-    document.getElementById(contennaire).append(body_)
+    body_.append(spinner, message)
+    container.append(body_)
 
-    return {spinner,message}
+    return {
+        show: (text = "Chargement...") => message.textContent = text,
+        remove: () => body_.remove()
+    }
+}
 
-})()
+const spinner = createSpinner()
+const viewedImages = new Set()
+
+const normalizeImagePath = (path = '') => {
+    try {
+        const url = new URL(path)
+        return url.pathname.replace(/^\/+/, '')
+    } catch {
+        return path.replace(/^\/+/, '')
+    }
+}
+
+const registerImageView = (path) => {
+    const normalized = normalizeImagePath(path)
+    if (!normalized || viewedImages.has(normalized)) return
+    viewedImages.add(normalized)
+    fetch('/api/image-view', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ imagePath: normalized })
+    }).catch(() => {})
+}
 
 
 
@@ -30,16 +59,16 @@ const getData=async()=>{//recuperaeation des donne au back
         })
 
         const realisation =await  dataRealisation.json()
-        Spinner.spinner.style.display="none"
+        spinner?.remove()
        
 
         if(!dataRealisation.ok) throw new Error(realisation.message);
 
-        console.log(realisation)
         loadindingImg(realisation)
         
     } catch (err) {
         console.error( "echec lor du chargement des donnes"+err)
+        spinner?.show("Échec du chargement")
     }
 
 }
@@ -70,6 +99,7 @@ const poste=(data_api,parent="",ClassName="item",info_div="active")=>{
 
     titre_.textContent=titre
     image_.src=image||"image/logo.png"
+    if (image) registerImageView(image)
 
 
     descrp.textContent=description||"aucune description pour le moment" 
