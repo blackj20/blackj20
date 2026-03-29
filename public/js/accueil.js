@@ -1,9 +1,9 @@
 
-const  Spinner=((contennaire="realisation-container")=>{
+const  spinner=(contennaire="")=>{
     const body_=document.createElement("div")
     const message = document.createElement("p")
     const spinner = document.createElement("span")
-    
+
     spinner.className="spinner"
     body_.className="cart_spinner"
 
@@ -13,14 +13,14 @@ const  Spinner=((contennaire="realisation-container")=>{
 
     return {spinner,message}
 
-})().spinner.style.display="none"
+}
 
 
 
 const getData=async()=>{//recuperaeation des donne au back
 
     try {
-        
+        spinner("realisation-container").message.textContent="chargement..."
         const dataRealisation= await fetch(" http://localhost:8080/api/",{
             method:"POST",
             headers:{
@@ -30,7 +30,8 @@ const getData=async()=>{//recuperaeation des donne au back
         })
 
         const realisation =await  dataRealisation.json()
-        Spinner.spinner.style.display="none"
+         spinner("realisation-container").message.textContent=""
+         spinner("realisation-container").message.textContent="chargement..."
        
 
         if(!dataRealisation.ok) throw new Error(realisation.message);
@@ -61,8 +62,6 @@ const poste=(data_api,parent="",ClassName="item",info_div="active")=>{
     const  image_ =document.createElement("img") // image de la realisation  
     const icon_desc=document.createElement("i") // icon de description
 
-    // div_cart.id="image"
-
     icon_desc.className="fas fa-info-circle"
     div_info.className=info_div
     div_cart.className=ClassName
@@ -82,6 +81,9 @@ const poste=(data_api,parent="",ClassName="item",info_div="active")=>{
 
     // localisation icon 
     // date icon  
+
+    
+
     
     if (anneé) {
     const year = document.createElement("p")
@@ -110,6 +112,9 @@ const poste=(data_api,parent="",ClassName="item",info_div="active")=>{
         div_info.classList.toggle("info")
     })
 
+
+     
+
     document.getElementById(parent).append(div_cart)
 }
 
@@ -118,8 +123,11 @@ const poste=(data_api,parent="",ClassName="item",info_div="active")=>{
 const loadindingImg=(data)=>{// on cree des poste en boucle
 
     console.log(data)
+
+    
     data.forEach(realis => {
        poste(realis,"realisation-container") 
+       
     });
 }
 
