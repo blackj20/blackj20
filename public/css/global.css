@@ -212,33 +212,38 @@ footer,
     }
 }
 .spinner {
-        
-        align-self: center;
-        display: inline-block;
-        width: 15px;
-        height:15px;
-        border: 2px solid #f6f6f658;
-        border-top-color: #ffd70f;
-        border-radius: 50%;
-        animation: spin 0.5s linear infinite;
-        margin-right: 5px;
-    }
-    
-    
-    @keyframes spin {
-        to { transform: rotate(360deg); }
-    }
+    align-self: center;
+    display: inline-block;
+    width: 16px;
+    height:16px;
+    border: 2px solid #f6f6f658;
+    border-top-color: #ffd70f;
+    border-radius: 50%;
+    animation: spin 0.5s linear infinite;
+    margin-right: 6px;
+}
+
+.spinner_message{
+    color: #f6f6f6;
+    font-size: 14px;
+}
+
+@keyframes spin {
+    to { transform: rotate(360deg); }
+}
 
 .cart_spinner{
     display: flex;
     align-items: center;
     justify-content: center;
-    gap:1px;
-    height: 40px;
-    width: 250px;
+    gap:8px;
+    padding: 16px 12px;
+    width: 100%;
+    box-sizing: border-box;
     position: relative;
-    top: 70px;
-    margin: 0 70px;
-   
+    top: 0;
+    margin: 12px 0;
+    background: rgba(255,255,255,0.03);
+    border: 1px solid rgba(255,255,255,0.05);
+    border-radius: 12px;
 }
-

@@ -1,6 +1,6 @@
 // recuperation des donne pour les trois main page de user 
 
-const { getAllElement }= require('../services/admin.service')
+const { getAllElement, incrementImageView }= require('../services/admin.service')
   
 
 // =========================== pou eviter de diplique la meme code  ==========================
@@ -44,4 +44,18 @@ const server_api=async(req,res)=>{
 }
 
 
-module.exports={server_api}
+const logImageView = async (req, res) => {
+    const { imagePath } = req.body
+    if (!imagePath) return res.status(400).json({ message: 'imagePath requis' })
+
+    try {
+        const result = await incrementImageView(imagePath)
+        if (!result.updated) return res.status(404).json({ message: result.reason })
+
+        res.json({ message: 'vue comptabilisée', views: result.views })
+    } catch (error) {
+        res.status(500).json({ message: 'une erreur se produit ' + error })
+    }
+}
+
+module.exports = { server_api, logImageView }

@@ -306,14 +306,18 @@ h1 {
 
 @media (max-width: 600px) {
   .admin-main {
-  width: 1200px;
-  margin: 0 auto;
-  padding: clamp(16px, 3vw, 40px);
-  display: grid;
-  gap: 20px;
-}
-  .card { padding: 10px; }
+    max-width: 100%;
+    width: 100%;
+    padding: 16px;
+    gap: 16px;
+  }
+  .admin-header { flex-direction: column; align-items: flex-start; gap: 10px; }
+  .admin-nav .pill { margin-right: 0; }
+  .card { padding: 12px; }
   .form-grid { grid-template-columns: 1fr; }
+  .metrics { grid-template-columns: repeat(auto-fit, minmax(120px, 1fr)); }
+  .data-table { min-width: 640px; }
   .data-table th, .data-table td { font-size: 13px; }
+  .table-wrap { overflow-x: auto; margin: 0 -8px; padding: 0 8px; }
   .metric span { font-size: 15px; }
 }

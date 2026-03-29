@@ -1,10 +1,54 @@
 // simolation data 
 
 
+const createSpinner = (containerId) => {
+    const container = document.getElementById(containerId)
+    if (!container) return null
+
+    const wrapper = document.createElement('div')
+    const message = document.createElement('p')
+    const icon = document.createElement('span')
+
+    wrapper.className = 'cart_spinner'
+    icon.className = 'spinner'
+    message.className = 'spinner_message'
+    message.textContent = 'Chargement...'
+
+    wrapper.append(icon, message)
+    container.append(wrapper)
+
+    return {
+        show: (text = 'Chargement...') => (message.textContent = text),
+        remove: () => wrapper.remove()
+    }
+}
+
+const spinner = createSpinner('actualiter')
+
+const normalizeImagePath = (path = '') => {
+    try {
+        const url = new URL(path)
+        return url.pathname.replace(/^\/+/, '')
+    } catch {
+        return path.replace(/^\/+/, '')
+    }
+}
+
+const registerImageView = (path) => {
+    const normalized = normalizeImagePath(path)
+    if (!normalized) return
+    fetch('/api/image-view', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ imagePath: normalized })
+    }).catch(() => {})
+}
+
 const getData=async()=>{//recuperaeation des donne au back
 
     try {
-        const dataRealisation= await fetch(" http://localhost:8080/api/get_actualites",{
+        spinner?.show('Chargement...')
+        const dataRealisation= await fetch("http://localhost:8080/api/get_actualites",{
             method:"POST",
             headers:{
                 "Content-Type":"application/json"
@@ -12,14 +56,16 @@ const getData=async()=>{//recuperaeation des donne au back
              body:JSON.stringify({data:"actualites"}) 
         })
 
-        const realisation= dataRealisation.json()
+        const realisation= await dataRealisation.json()
 
         if(!dataRealisation.ok) throw new Error(realisation.message);
 
         loadindingImg(realisation)
+        spinner?.remove()
         
     } catch (err) {
         console.error( "echec lor du chargement des donnes")
+        spinner?.show("Échec du chargement")
     }
 
 }
@@ -49,7 +95,7 @@ const poste=(data_api,parent="",ClassName="item",info_div="active")=>{
 
     if(!parent)return alert(" erreur arrét 'affichage  parent manquant !")
 
-    const { titre ,img,data_description,anneé,localisation }=data_api // on retire tout les donne du data 
+    const { titre ,img, image, data_description,anneé,localisation }=data_api // on retire tout les donne du data 
 
     const div_cart =document.createElement("div") // le contenneur
     const div_info =document.createElement("div") // le contenneur
@@ -66,7 +112,9 @@ const poste=(data_api,parent="",ClassName="item",info_div="active")=>{
 
 
     titre_.textContent=titre
-    image.src=img||"image/logo.png"
+    const imgSrc = image || img || "image/logo.png"
+    image.src=imgSrc
+    if (imgSrc && imgSrc !== "image/logo.png") registerImageView(imgSrc)
 
 
     descrp.textContent=data_description||"aucune description pour le moment" 
@@ -110,6 +158,3 @@ const poste=(data_api,parent="",ClassName="item",info_div="active")=>{
 
     document.getElementById(parent).append(div_cart)
 }
-
-loadindingImg()
-loadindingImg(annonce_data)

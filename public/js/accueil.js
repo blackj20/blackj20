@@ -1,48 +1,69 @@
 
-const  spinner=(contennaire="")=>{
-    const body_=document.createElement("div")
-    const message = document.createElement("p")
-    const spinner = document.createElement("span")
+const createSpinner = (containerId) => {
+    const container = document.getElementById(containerId)
+    if (!container) return null
 
-    spinner.className="spinner"
-    body_.className="cart_spinner"
+    const wrapper = document.createElement('div')
+    const message = document.createElement('p')
+    const icon = document.createElement('span')
 
-    body_.append(message,spinner)
-        
-    document.getElementById(contennaire).append(body_)
+    wrapper.className = 'cart_spinner'
+    icon.className = 'spinner'
+    message.className = 'spinner_message'
+    message.textContent = 'Chargement...'
 
-    return {spinner,message}
+    wrapper.append(icon, message)
+    container.append(wrapper)
 
+    return {
+        show: (text = 'Chargement...') => (message.textContent = text),
+        done: (text = '') => { message.textContent = text },
+        remove: () => wrapper.remove()
+    }
 }
 
+const spinner = createSpinner('realisation-container')
 
-
-const getData=async()=>{//recuperaeation des donne au back
-
+const normalizeImagePath = (path = '') => {
     try {
-        spinner("realisation-container").message.textContent="chargement..."
-        const dataRealisation= await fetch(" http://localhost:8080/api/",{
-            method:"POST",
-            headers:{
-                "Content-Type":"application/json"
+        const url = new URL(path)
+        return url.pathname.replace(/^\/+/, '')
+    } catch {
+        return path.replace(/^\/+/, '')
+    }
+}
+
+const registerImageView = (path) => {
+    const normalized = normalizeImagePath(path)
+    if (!normalized) return
+    fetch('/api/image-view', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ imagePath: normalized })
+    }).catch(() => {})
+}
+
+const getData = async () => {
+    try {
+        spinner?.show('Chargement...')
+        const dataRealisation = await fetch('http://localhost:8080/api/', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
             },
-             body:JSON.stringify({data:"accueil"}) 
+            body: JSON.stringify({ data: 'accueil' })
         })
 
-        const realisation =await  dataRealisation.json()
-         spinner("realisation-container").message.textContent=""
-         spinner("realisation-container").message.textContent="chargement..."
-       
+        const realisation = await dataRealisation.json()
 
-        if(!dataRealisation.ok) throw new Error(realisation.message);
+        if (!dataRealisation.ok) throw new Error(realisation.message)
 
-        console.log(realisation)
         loadindingImg(realisation)
-        
+        spinner?.remove()
     } catch (err) {
-        console.error( "echec lor du chargement des donnes"+err)
+        console.error('echec lors du chargement des donnees ' + err)
+        spinner?.show("Échec du chargement")
     }
-
 }
 
 getData()
@@ -69,6 +90,7 @@ const poste=(data_api,parent="",ClassName="item",info_div="active")=>{
 
     titre_.textContent=titre
     image_.src=image||"image/logo.png"
+    if (image) registerImageView(image)
 
 
     descrp.textContent=description||"aucune description pour le moment" 
@@ -122,7 +144,7 @@ const poste=(data_api,parent="",ClassName="item",info_div="active")=>{
 
 const loadindingImg=(data)=>{// on cree des poste en boucle
 
-    console.log(data)
+    
 
     
     data.forEach(realis => {
@@ -130,4 +152,3 @@ const loadindingImg=(data)=>{// on cree des poste en boucle
        
     });
 }
-
