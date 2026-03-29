@@ -211,4 +211,34 @@ footer,
         padding: 12px;
     }
 }
+.spinner {
+        
+        align-self: center;
+        display: inline-block;
+        width: 15px;
+        height:15px;
+        border: 2px solid #f6f6f658;
+        border-top-color: #ffd70f;
+        border-radius: 50%;
+        animation: spin 0.5s linear infinite;
+        margin-right: 5px;
+    }
+    
+    
+    @keyframes spin {
+        to { transform: rotate(360deg); }
+    }
+
+.cart_spinner{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap:1px;
+    height: 40px;
+    width: 250px;
+    position: relative;
+    top: 70px;
+    margin: 0 70px;
+   
+}
 

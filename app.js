@@ -3,7 +3,7 @@ require('dotenv').config();
 const express = require('express')
 const app = express()
 const cors = require('cors')
-const { statsMiddleware_ } = require('./middleware/stat.middleware')
+// const { statsMiddleware_ } = require('./middleware/stat.middleware')
 const { trafique } = require('./middleware/global.middleware')
 const { ensureVisitor, incrementImageView } = require('./middleware/visitor.middleware')
 

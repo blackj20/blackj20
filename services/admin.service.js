@@ -109,8 +109,11 @@ const creeUnannonce = ({ titre, message }) => {
 
 // -------------------- autres actions admin --------------------
 const getAllElement = (target) => {
+  
   const table = ensureTableAllowed(target)
+
   const selectId = table === 'annonce' ? 'rowid as id, *' : '*'
+  
   const query = `select ${selectId} from ${table}`
   return new Promise((resolve, reject) => {
     db.all(query, function (err, rows) {
@@ -148,6 +151,7 @@ const topImages = (limit = 5) => {
 }
 
 // ========================================== recupere par choix ===================
+
 const getElement = (take, target) => {
   const query = `select * from ${take} where username=? or phone=? or email=? `
   return new Promise((resolve, reject) => {
@@ -212,7 +216,8 @@ allImage=()=>{
       console.log(rows)
     })
 }
-allImage()
+
+
 module.exports = {
   upload,
   saveImageRecord,

@@ -4,6 +4,7 @@ const db = require('../config/init')
 const COOKIE_NAME = 'emc_uid'
 const COOKIE_MAX_AGE = 1000 * 60 * 60 * 24 * 30 // 30 jours
 
+
 const parseCookies = (cookieHeader = '') => {
   return cookieHeader.split(';').reduce((acc, part) => {
     const [key, ...rest] = part.trim().split('=')

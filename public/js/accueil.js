@@ -1,30 +1,24 @@
-// const api_actualite=[// ------------------------- similation des donnés-------------------
-//     { titre:"maison de 5 etage a ngombe" ,  img:"image/WhatsApp Image 2026-03-16 at 10.05.27(2).jpeg",data_description:"appartement meuble si tue a ..." },
-//     { titre:"hotel trois etoile" ,          img:"image/WhatsApp Image 2026-03-16 at 10.05.26(1).jpeg",data_description:"des suite de luxe cliumatise avec ..." },
-//     { titre:" appartement de trois niveaux",img:"image/WhatsApp Image 2026-03-16 at 09.44.52(1).jpeg",data_description:"appartement de haut quanlites dans des ..." },
-//       ]
+const  spinner=(contennaire="")=>{
+    const body_=document.createElement("div")
+    const message = document.createElement("p")
+    const spinner = document.createElement("span")
 
-const api_realisation=[
+    spinner.className="spinner"
+    body_.className="cart_spinner"
 
-    { titre:"maison de loisire" ,img:"image/WhatsApp Image 2026-03-16 at 09.44.29(1).jpeg",data_description:"" , anneé:"2011",localisation:"mongafula"},
-    { titre:"salle de fete " ,img:"image/WhatsApp Image 2026-03-16 at 09.44.32.jpeg",data_description:"un chetie de 2 ans " , anneé:"2013",localisation:"mitendi"},
-    { titre:"eglise" ,img:"image/WhatsApp Image 2026-03-16 at 09.44.41.jpeg",data_description:"une maison de 5 etages pour fammile nombreuse avec vu sur la nature" , anneé:"2018",localisation:"ma campagne"}
-]
+    body_.append(message,spinner)
+        
+    document.getElementById(contennaire).append(body_)
 
-// const api_project=[
+    return {spinner,message}
 
-//     { titre:"roject_numero_1" ,img:"image/WhatsApp Image 2026-03-16 at 09.44.51(1).jpeg",data_description:"" },
-//     { titre:"roject_numero_2" ,img:'image/WhatsApp Image 2026-03-16 at 09.44.36.jpeg',data_description:"une maison de 5 etages pour fammile nombreuse avec vu sur la nature" },
-//     { titre:"roject_numero_3" ,img:"image/WhatsApp Image 2026-03-16 at 09.44.41.jpeg",data_description:"" }
-// ]
-
-
-
+}
 
 
 const getData=async()=>{//recuperaeation des donne au back
 
     try {
+        spinner("realisation-container")
         const dataRealisation= await fetch(" http://localhost:8080/api/",{
             method:"POST",
             headers:{
@@ -33,14 +27,20 @@ const getData=async()=>{//recuperaeation des donne au back
              body:JSON.stringify({data:"accueil"}) 
         })
 
-        const realisation= dataRealisation.json()
+        const realisation =await  dataRealisation.json()
+        spinner("realisation-container").message.textContent=""
+        spinner("realisation-container").spinner.style.display="none"
+       
 
         if(!dataRealisation.ok) throw new Error(realisation.message);
 
+        console.log(realisation)
         loadindingImg(realisation)
         
     } catch (err) {
-        console.error( "echec lor du chargement des donnes")
+        spinner("realisation-container").message.textContent=""
+        spinner("realisation-container").spinner.style.display="none"
+        console.error( "echec lor du chargement des donnes"+err)
     }
 
 }
@@ -51,7 +51,7 @@ const poste=(data_api,parent="",ClassName="item",info_div="active")=>{
 
     if(!parent)return alert(" erreur arrét 'affichage  parent manquant !")
 
-    const { titre ,img,data_description,anneé,localisation }=data_api // on retire tout les donne du data 
+    const { anneé,localisation,titre,description,image }=data_api // on retire tout les donne du data 
 
     const div_cart =document.createElement("div") // le contenneur
     const div_info =document.createElement("div") // le contenneur
@@ -59,7 +59,7 @@ const poste=(data_api,parent="",ClassName="item",info_div="active")=>{
     const icon_2=document.createElement("i")
     const  titre_=document.createElement("h3")   // titre de la realisation
     const  descrp= document.createElement("p")// description sur la realisation
-    const  image =document.createElement("img") // image de la realisation  
+    const  image_ =document.createElement("img") // image de la realisation  
     const icon_desc=document.createElement("i") // icon de description
 
     icon_desc.className="fas fa-info-circle"
@@ -68,13 +68,13 @@ const poste=(data_api,parent="",ClassName="item",info_div="active")=>{
 
 
     titre_.textContent=titre
-    image.src=img||"image/logo.png"
+    image_.src=image||"image/logo.png"
 
 
-    descrp.textContent=data_description||"aucune description pour le moment" 
+    descrp.textContent=description||"aucune description pour le moment" 
     descrp.prepend(icon_desc)
     div_info.append(titre_,descrp)
-    div_cart.append(image,div_info)
+    div_cart.append(image_,div_info)
 
     icon.className="fas fa-eye"
     icon_2.className="fas fa-map-marker-alt"
@@ -119,18 +119,19 @@ const poste=(data_api,parent="",ClassName="item",info_div="active")=>{
 }
 
 
-const loadindingImg=(data_realis)=>{// on cree des poste en boucle
+
+
+
+const loadindingImg=(data)=>{// on cree des poste en boucle
+
+    console.log(data)
 
     
-    data_realis.forEach(realis => {
+    data.forEach(realis => {
+
        poste(realis,"realisation-container") 
+       
        
     });
 }
-
-loadindingImg(api_realisation)
-
-
-
-
 

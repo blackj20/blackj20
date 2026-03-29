@@ -11,8 +11,9 @@ const server_api=async(req,res)=>{
     switch (data) {
         case "realisation":
             try {
-                const data_realisation =await getAllElement("realisation")
-                res.json(data_realisation)
+                const data_realisation = await getAllElement("realisation")
+                res.json(data_realisation) // on envoie un tableau pour eviter les erreur de type dans le front
+               
             } catch (err) {
                 res.status(500).json({ message: "une erreur se produit "+err })
             }
@@ -30,6 +31,7 @@ const server_api=async(req,res)=>{
 
             try {
                 const accueilData =await getAllElement("realisation")
+                console.log(accueilData)
                 res.json(accueilData)
             } catch (error) {
                 res.status(500).json({ message: "une erreur se produit "+error })
