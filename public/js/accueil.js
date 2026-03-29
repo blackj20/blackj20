@@ -13,7 +13,7 @@ const  Spinner=((contennaire="realisation-container")=>{
 
     return {spinner,message}
 
-})()
+})().spinner.style.display="none"
 
 
 
