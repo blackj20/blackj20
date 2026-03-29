@@ -2,7 +2,7 @@
 
 const routeRequette=(req,res,next)=>{ // on coute tout demmend extern
 
-    const auth=["accueil","realisation","actualites"]
+    const auth=["accueil","realisation","actualites","annonce"]
     const { data }=req.body
 
 

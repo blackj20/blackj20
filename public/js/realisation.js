@@ -1,10 +1,54 @@
+const createSpinner = (containerId) => {
+    const container = document.getElementById(containerId)
+    if (!container) return null
 
+    const wrapper = document.createElement('div')
+    const message = document.createElement('p')
+    const icon = document.createElement('span')
 
+    wrapper.className = 'cart_spinner'
+    icon.className = 'spinner'
+    message.className = 'spinner_message'
+    message.textContent = 'Chargement...'
+
+    wrapper.append(icon, message)
+    container.append(wrapper)
+
+    return {
+        show: (text = 'Chargement...') => (message.textContent = text),
+        remove: () => wrapper.remove()
+    }
+}
+
+const spinner = createSpinner('realisation-container')
+let allRealisations = []
+const viewedImages = new Set()
+
+const normalizeImagePath = (path = '') => {
+    try {
+        const url = new URL(path)
+        return url.pathname.replace(/^\/+/, '')
+    } catch {
+        return path.replace(/^\/+/, '')
+    }
+}
+
+const registerImageView = (path) => {
+    const normalized = normalizeImagePath(path)
+    if (!normalized || viewedImages.has(normalized)) return
+    viewedImages.add(normalized)
+    fetch('/api/image-view', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ imagePath: normalized })
+    }).catch(() => {})
+}
 
 const getData=async()=>{//recuperaeation des donne au back
 
     try {
-        const dataRealisation= await fetch(" http://localhost:8080/api/get_realisation",{
+        spinner?.show('Chargement...')
+        const dataRealisation= await fetch("/api/get_realisation",{
             method:"POST",
             headers:{
                 "Content-Type":"application/json"
@@ -13,24 +57,21 @@ const getData=async()=>{//recuperaeation des donne au back
         })
 
         const realisation = await dataRealisation.json()
-       
+        allRealisations = Array.isArray(realisation) ? realisation : []
 
         if(!dataRealisation.ok) throw new Error(realisation.message);
 
-        loadindingImg(realisation)
+        loadindingImg(allRealisations)
+        spinner?.remove()
         
     } catch (err) {
         console.error( "echec lor du chargement des donnes"+err)
+        spinner?.show("Échec du chargement")
     }
 
 }
 
 getData()
-
-
-
-
-
 
 const poste=(data_api,parent="",ClassName="item",info_div="active")=>{
 
@@ -54,6 +95,7 @@ const poste=(data_api,parent="",ClassName="item",info_div="active")=>{
 
     titre_.textContent=titre
     image_.src=image||"image/logo.png"
+    if (image) registerImageView(image)
 
 
     descrp.textContent=description||"aucune description pour le moment" 
@@ -100,15 +142,33 @@ const poste=(data_api,parent="",ClassName="item",info_div="active")=>{
 
 
 const loadindingImg=(data)=>{// on cree des poste en boucle
+    const container = document.getElementById("realisation-container")
+    if (!container) return
+    container.innerHTML = ''
     
-    
+    if (!Array.isArray(data) || data.length === 0) {
+        const empty = document.createElement('p')
+        empty.textContent = "Aucun résultat pour l'instant."
+        empty.className = 'muted'
+        container.append(empty)
+        return
+    }
     
    data.forEach(realis => {
-    console.log(realis)
        poste(realis,"realisation-container") 
    
     });
 }
 
+const applySearch = () => {
+    const input = document.getElementById('accrp')
+    const term = input?.value?.toLowerCase().trim() || ''
+    if (!term) return loadindingImg(allRealisations)
+    const filtered = allRealisations.filter(({ titre='', localisation='', anneé='', description='' }) => {
+        return [titre, localisation, anneé, description].some((field) => (field || '').toLowerCase().includes(term))
+    })
+    loadindingImg(filtered)
+}
 
-// loadindingImg(api_realisation) // donne de teste 
+document.getElementById('accrp')?.addEventListener('input', applySearch)
+document.getElementById('go')?.addEventListener('click', applySearch)

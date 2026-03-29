@@ -1,0 +1,114 @@
+body{
+    background: radial-gradient(circle at 10% 20%, rgba(255,147,7,0.1), transparent 35%), #0b0b0d;
+    color: #f6f6f6;
+    font-family: 'Poppins', 'Segoe UI', system-ui, sans-serif;
+    margin: 0;
+    min-height: 100vh;
+}
+
+.hero-annonce{
+    padding: 32px 20px;
+    text-align: center;
+    background: linear-gradient(120deg, rgba(34,82,8,0.6), rgba(255,147,7,0.4));
+    border-bottom: 1px solid rgba(255,255,255,0.08);
+    box-shadow: 0 10px 30px rgba(0,0,0,0.35);
+}
+
+.hero-annonce h1{
+    margin: 0;
+    font-size: clamp(24px, 4vw, 34px);
+}
+.hero-annonce p{
+    margin: 8px auto 0;
+    max-width: 720px;
+    color: #e8e8e8;
+}
+
+.annonce-shell{
+    max-width: 1100px;
+    margin: 0 auto;
+    padding: 24px 16px 40px;
+}
+
+.annonce-search{
+    display: flex;
+    gap: 10px;
+    margin: 10px 0 24px;
+}
+.annonce-search input{
+    flex: 1;
+    height: 44px;
+    border-radius: 12px;
+    border: 1px solid rgba(255,255,255,0.15);
+    background: rgba(255,255,255,0.06);
+    color: #fff;
+    padding: 0 12px;
+    outline: none;
+}
+.annonce-search button{
+    height: 44px;
+    padding: 0 14px;
+    border-radius: 12px;
+    border: none;
+    cursor: pointer;
+    background: linear-gradient(120deg, #ffd70f, #ff9a1f);
+    color: #1a1300;
+    font-weight: 700;
+    letter-spacing: 0.01em;
+    box-shadow: 0 8px 20px rgba(255,154,31,0.3);
+}
+
+.annonce-grid{
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+    gap: 16px;
+}
+
+.annonce-card{
+    background: rgba(255,255,255,0.04);
+    border: 1px solid rgba(255,255,255,0.08);
+    border-radius: 14px;
+    padding: 16px;
+    box-shadow: 0 12px 30px rgba(0,0,0,0.35);
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+.annonce-head{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 10px;
+}
+.annonce-head h3{
+    margin: 0;
+    font-size: 18px;
+    color: #ffd70f;
+}
+.annonce-date{
+    padding: 6px 10px;
+    border-radius: 999px;
+    background: rgba(255,147,7,0.12);
+    color: #ffcf7d;
+    font-size: 12px;
+    border: 1px solid rgba(255,255,255,0.12);
+}
+.annonce-body{
+    margin: 0;
+    line-height: 1.5;
+    color: #f2f2f2;
+}
+.empty{
+    color: #bfc3c7;
+    text-align: center;
+    padding: 20px 0;
+}
+
+@media (max-width: 640px){
+    .annonce-search{
+        flex-direction: column;
+    }
+    .annonce-search button{
+        width: 100%;
+    }
+}

@@ -92,6 +92,20 @@ const isAdmin = (req, res, next) => {
   next()
 }
 
+// -------------------------------- login simple ----------------------------------
+const login = async (req, res) => {
+  const { identifian, password } = req.body
+  try {
+    const user = await srv.getUserByIdentifiant(identifian)
+    if (!user || user.password !== password) {
+      return res.status(401).json({ message: 'identifiants invalides' })
+    }
+    res.json({ message: 'connecté', user: { id: user.id, username: user.username } })
+  } catch (error) {
+    res.status(500).json({ message: 'erreur lors de la connexion', error: error.message })
+  }
+}
+
 const checkCoockie = (req, res, next) => {
   const token = req.cookies.token
 
@@ -189,5 +203,6 @@ module.exports = {
   updateElement,
   deleteElement,
   TARGETS,
-  getStats
+  getStats,
+  login
 }

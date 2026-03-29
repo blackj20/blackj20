@@ -21,7 +21,7 @@ const getData=async()=>{//recuperaeation des donne au back
 
     try {
         
-        const dataRealisation= await fetch(" http://localhost:8080/api/",{
+        const dataRealisation= await fetch("/api/",{
             method:"POST",
             headers:{
                 "Content-Type":"application/json"
@@ -122,4 +122,3 @@ const loadindingImg=(data)=>{// on cree des poste en boucle
        poste(realis,"realisation-container") 
     });
 }
-

@@ -150,6 +150,44 @@ const topImages = (limit = 5) => {
   })
 }
 
+// -------------------- image views --------------------
+const normalizeImagePath = (imagePath = '') => imagePath.replace(/^\/?/, '')
+
+const incrementImageView = (imagePath) => {
+  return new Promise((resolve, reject) => {
+    if (!imagePath) return resolve({ updated: false, reason: 'imagePath manquant' })
+
+    const normalized = normalizeImagePath(imagePath)
+
+    db.get('SELECT id FROM images WHERE path=?', [normalized], (err, row) => {
+      if (err) return reject(err)
+      if (!row) return resolve({ updated: false, reason: 'image introuvable' })
+
+      const upsert = `INSERT INTO image_views (image_id, views)
+                      VALUES (?, 1)
+                      ON CONFLICT(image_id) DO UPDATE SET views = views + 1`
+
+      db.run(upsert, [row.id], function (err) {
+        if (err) return reject(err)
+
+        db.get('SELECT views FROM image_views WHERE image_id=?', [row.id], (err, countRow) => {
+          if (err) return reject(err)
+          resolve({ updated: true, views: countRow?.views || 1 })
+        })
+      })
+    })
+  })
+}
+
+const getUserByIdentifiant = (identifian) => {
+  return new Promise((resolve, reject) => {
+    db.get('SELECT * FROM users WHERE username=?', [identifian], (err, row) => {
+      if (err) return reject(err)
+      resolve(row || null)
+    })
+  })
+}
+
 // ========================================== recupere par choix ===================
 
 const getElement = (take, target) => {
@@ -230,5 +268,7 @@ module.exports = {
   deleteElem,
   countVisitors,
   topImages,
-  logPageView
+  logPageView,
+  incrementImageView,
+  getUserByIdentifiant
 }

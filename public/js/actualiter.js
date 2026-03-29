@@ -4,7 +4,7 @@
 const getData=async()=>{//recuperaeation des donne au back
 
     try {
-        const dataRealisation= await fetch(" http://localhost:8080/api/get_actualites",{
+        const dataRealisation= await fetch("/api/get_actualites",{
             method:"POST",
             headers:{
                 "Content-Type":"application/json"

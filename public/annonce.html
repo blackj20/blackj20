@@ -8,10 +8,10 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="css/global.css">
-    <link rel="stylesheet" href="css/about.css">
+    <link rel="stylesheet" href="css/annonce.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
-    <title>à propos</title>
+    <title>Annonces EMC</title>
 </head>
 <body>
     <header>
@@ -34,7 +34,17 @@
         </nav>
     </header>
     <main>
-        
+        <section class="hero-annonce">
+            <h1>Nos annonces</h1>
+            <p>Restez informé des messages importants, offres et alertes publiés par l'équipe EMC.</p>
+        </section>
+        <section class="annonce-shell">
+            <div class="annonce-search">
+                <input type="search" id="annonce-search" placeholder="Rechercher par titre ou contenu...">
+                <button id="annonce-search-btn">Rechercher</button>
+            </div>
+            <div id="annonce-list" class="annonce-grid"></div>
+        </section>
     </main>
 
    <footer class="site-footer">
@@ -55,7 +65,7 @@
 
         <p class="footer-copy">© 2024 EMC Construction. Tous droits réservés.</p>
     </footer>
-    <script src="js/actualiter.js"></script>
+    <script src="js/annonce.js"></script>
 
 </body>
 </html>

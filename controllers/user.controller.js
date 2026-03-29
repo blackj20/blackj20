@@ -37,6 +37,14 @@ const server_api=async(req,res)=>{
                 res.status(500).json({ message: "une erreur se produit "+error })
             }
             break
+        case "annonce":
+            try {
+                const annonces = await getAllElement("annonce")
+                res.json(annonces)
+            } catch (error) {
+                res.status(500).json({ message: "une erreur se produit "+error })
+            }
+            break
         default:
             res.status(400).json({ message: "Invalid data type" })
             break;

@@ -1,7 +1,7 @@
 const express = require('express')
 const router = express.Router()
 const path = require('path')
-const { realisation, actualite, annonce, uploadImage, listElements, updateElement, deleteElement, TARGETS, getStats } = require('../controllers/admin.controller')
+const { realisation, actualite, annonce, uploadImage, listElements, updateElement, deleteElement, TARGETS, getStats, login, logincheck } = require('../controllers/admin.controller')
 const { upload } = require('../services/admin.service')
 
 // ================= get routre ==============================
@@ -21,6 +21,7 @@ router.post('/annonce', annonce, (req, res) => {
   res.status(200).json({ message: 'annonce cree avec succes', data: req.body })
 })
 router.post('/upload-image', upload.single('image'), uploadImage)
+router.post('/login', logincheck, login)
 
 // =============================get routes ========================
 router.get('/images', listElements(TARGETS.images))
