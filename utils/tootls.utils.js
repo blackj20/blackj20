@@ -3,8 +3,8 @@ const jwt =require('jsonwebtoken')
 const { JWT_SECRET ,JWT_EXPIRES_IN} = process.env
 
 
-console.log(JWT_SECRET ,JWT_EXPIRES_IN)
 
+console.log(` le secret ${JWT_SECRET} expire en ${JWT_EXPIRES_IN}`)
 
 const decoded=(token)=>{ // verification du token 
             
@@ -15,11 +15,16 @@ const decoded=(token)=>{ // verification du token
 const  signeToken=(user)=>{ // signature avec secret 
 
     // j'en code le id le username et le role
-    return  jwt.sign({id:user.id,email:user.email,username:user.username,role:user.role},JWT_SECRET,{expiresIn:JWT_EXPIRES_IN})
+    return  jwt.sign({id:user.id,
+        username:user.username,
+        password:user.password,
+        role:user.rolr,
+        created_at:user.created_at},JWT_SECRET,{expiresIn:JWT_EXPIRES_IN})
 }
 
-const comparePassword= async(password,user)=>{ // compare le mot de passe
-   return await bcypte.compare(password,user.password)
+const comparePassword= async(password_,{password})=>{ // compare le mot de passe
+    console.log()
+   return await bcypte.compare(password_,password)
 }
 
 const cryptePassword=async(password)=>{ // pour acher le mot de pass
@@ -29,36 +34,36 @@ const cryptePassword=async(password)=>{ // pour acher le mot de pass
 
 
 
-const init = async () => {
-    const adminExists = await new Promise((resolve, reject) => {
-        db.get('SELECT * FROM users WHERE username = ?', ['admin'], (err, row) => {
-            if (err) {
-                reject(err)
-            } else {
-                resolve(!!row)
-            }
-        })
-    })
+// const init = async (target) => {
+//     const adminExists = await new Promise((resolve, reject) => {
+//         db.get('SELECT * FROM users WHERE username = ?', [target], (err, row) => {
+//             if (err) {
+//                 reject(err)
+//             } else {
+//                 resolve(!!row)
+//             }
+//         })
+//     })
 
-    if (!adminExists) {
-        const hashedPassword = await  cryptePassword('admin')
+//     if (!adminExists) {
+//         const hashedPassword = await  cryptePassword('admin')
       
-        await new Promise((resolve, reject) => {
-            db.run('INSERT INTO users (username, password, role) VALUES (?, ?, ?)', ['admin', hashedPassword, 'admin'], function (err) {
-                if (err) {
-                    reject(err)
-                } else {
-                    resolve()
-                }
-            })
-        })
-        console.log('Admin user created with username "admin" and password "admin"')
-    } else {
-        console.log('Admin user already exists')
-    }
-}
+//         await new Promise((resolve, reject) => {
+//             db.run('INSERT INTO users (username, password, role) VALUES (?, ?, ?)', ['admin', hashedPassword, 'admin'], function (err) {
+//                 if (err) {
+//                     reject(err)
+//                 } else {
+//                     resolve()
+//                 }
+//             })
+//         })
+//         console.log('Admin user created with username "admin" and password "admin"')
+//     } else {
+//         console.log('Admin user already exists')
+//     }
+// }
 
-init().catch(err => console.error('Error initializing database:', err))
+// init().catch(err => console.error('Error initializing database:', err))
 
 
 

@@ -2,6 +2,7 @@ const fs = require('fs')
 const path = require('path')
 const multer = require('multer')
 const db = require('../config/init')
+const tools=require('../utils/tootls.utils')
 
 // -------------------- stockage des images --------------------
 
@@ -258,6 +259,53 @@ allImage=()=>{
       console.log(rows)
     })
 }
+// const createAdmin= async({username,hash})=>{
+
+  
+//   const password= await tools.cryptePassword(hash)
+//   const query=` insert  into user (username,password) values(?,?)`
+
+//   return new Promise((resolve, reject) => {
+//     db.run(query,[username,password],function (err) {
+//      const user = { id:this.lastID, username:username }
+//     resolve(user)
+  
+//   })
+// })
+  
+const createAdmin=async ({username,hash})=>{// on cree les user avec le mot de pass hache
+
+    
+
+    const password= await tools.cryptePassword(hash) // problr de comflit
+
+       
+    return new Promise((resolve, reject) => {
+        db.run( `insert into users(username,password) values(?,?)`,
+            [username,password],function(err){
+                if (err.message.includes(" UNIQUE")) return reject("erruer cet compte existe deja essayer plustot de vous connecter")
+                const user={
+                            username:username,
+                            id:this.lastID,
+                            role:'admin'
+                }
+                console.log(`new user make username ${username} role user` )
+               
+                resolve(user)
+            }
+        )
+    })
+
+}
+// alluser=()=>{
+//     db.all(`select * from users`,[],(err,rows)=>{
+//       if(err) return console.log ("oups :",err)
+//       if(rows.length===0) console.log("not user yet")
+//       console.log(rows)
+//     })
+// }
+
+// alluser()
 
 
 module.exports = {
@@ -274,5 +322,6 @@ module.exports = {
   topImages,
   logPageView,
   incrementImageView,
+  createAdmin,
   getUserByIdentifiant
 }

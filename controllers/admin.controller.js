@@ -1,6 +1,9 @@
 
 
 const srv = require('../services/admin.service')
+const tools = require('../utils/tootls.utils')
+
+
 const TARGETS = {
   actualite: 'actualite',
   realisation: 'realisation',
@@ -36,89 +39,33 @@ const annonce = async (req, res) => {
   }
 }
 
-// ------------------------ check register -----------------------
-const checkDataCreat = (req, res, next) => {
-  try {
-    const { username, password } = req.body
-
-    if (!username || !password)
-      res.status(401).json({ message: 'donne incomplet' })
-    else if (req.path !== '/createUser') res.status(400).json({ message: "erruer chemin. On n'est perdue? :)" })
-    else if (req.method !== 'POST') res.status(400).json({ message: "erruer methode . ici tu donne pas l'inverse  :)" })
-    else {
-      req.body.valide = true
-      next()
-    }
-  } catch (err) {
-    res.status(400).json({ message: 'erreur :' + err })
-  }
-}
-// ------------------------ check login --------------------------
-const logincheck = (req, res, next) => {
-  const { identifian, password } = req.body
-
-  if (!identifian || !password) {
-    res.status(403).json({ message: 'donne incorect' })
-  } else if (req.path !== '/login') res.status(400).json({ message: "erruer chemin. On n'est perdue? :)" })
-  else if (req.method !== 'POST') res.status(400).json({ message: "erruer methode . ici tu donne pas l'inverse  :)" })
-  else {
-    next()
-  }
-}
-// -------------------------- main auth --------------------------
-const auth = (req, res, next) => {
-  const header = req.headers.authorization
-
-  if (!header) return res.status(401).json({ message: ' pas de token ' })
-
-  const token = header.split(' ')[1]
-
-  try {
-    const { id } = req.body.user
-    const user = link(id)
-
-    if (!user.id === id) res.status(403).json({ message: 'vous ne pouvez ni modifie ce poste ni la supprimer' })
-
-    next()
-  } catch (err) {
-    return res.status(403).json({ message: 'invalid or expired token' + err })
-  }
-}
-
-// ------------------------------ admin --------------------------
-
-const isAdmin = (req, res, next) => {
-  if (!req.body.user.role === 'admin') res.status(403).json({ message: 'page reserve au admins .' })
-  next()
-}
-
 // -------------------------------- login simple ----------------------------------
 const login = async (req, res) => {
-  const { identifian, password } = req.body
+  const { username, hash } = req.body
+
   try {
-    const user = await srv.getUserByIdentifiant(identifian)
-    if (!user || user.password !== password) {
+    const user = await srv.getUserByIdentifiant(username)
+
+    console.log(user)
+
+    const check = await tools.comparePassword(hash,user)
+
+    console.log(check)
+    
+
+    if (check!==true) {
       return res.status(401).json({ message: 'identifiants invalides' })
     }
-    res.json({ message: 'connecté', user: { id: user.id, username: user.username } })
+    
+    const token= await tools.signeToken(user)
+    res.json(token)
   } catch (error) {
     
     res.status(500).json({ message: 'erreur lors de la connexion', error: error.message })
   }
 }
 
-const checkCoockie = (req, res, next) => {
-  const token = req.cookies.token
 
-  if (!token) return res.status(401).json({ message: ' pas de token ' })
-  try {
-    const user = decoded(token)
-    req.user = user
-    next()
-  } catch (err) {
-    return res.status(403).json({ message: 'invalid or expired token' + err })
-  }
-}
 
 // -------------------------------- uploads image ---------------------------------------
 
@@ -190,16 +137,27 @@ const getStats = async (req, res) => {
   }
 }
 
+
+const NewAdmin= async(req,res)=>{
+
+  try {
+    const user = await srv.createAdmin(req.body)
+    res.status(200).json(user)
+  } catch (err) {
+    res.status(500).json({message:"une erreur se produit: "+err})
+
+    
+  }
+
+
+}
+
 module.exports = {
-  checkDataCreat,
-  auth,
-  logincheck,
-  isAdmin,
+  NewAdmin,
   realisation,
   actualite,
   annonce,
   uploadImage,
-  checkCoockie,
   listElements,
   updateElement,
   deleteElement,

@@ -3,5 +3,5 @@ node_modules
 Plan.txt
 image 
 uploads
-.env
 .codex
+.env

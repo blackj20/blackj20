@@ -1,29 +1,24 @@
 const express = require('express')
 const router = express.Router()
 const path = require('path')
-const { realisation, actualite, annonce, uploadImage, listElements, updateElement, deleteElement, TARGETS, getStats, login, logincheck, auth } = require('../controllers/admin.controller')
+const { realisation, actualite, annonce, uploadImage, listElements,NewAdmin, updateElement, deleteElement, TARGETS, getStats, login } = require('../controllers/admin.controller')
 const { upload } = require('../services/admin.service')
-
+const {  logincheck,isAdmin,auth,checkDataCreat }=require('../middleware/global.middleware')
 
 // ================= get routre ==============================
-router.get('/', (req, res) => {
+
+
+
+router.get('/tableau_de_bord',auth,isAdmin,(req, res) => {
   res.sendFile(path.join(__dirname, '../public/admin.html'))
 })
 
 // =============================post routes ========================
 
-router.post('/realisation', realisation, (req, res) => {
-  res.status(200).json({ message: 'realisation cree avec succes', data: req.body })
-})
-router.post('/actualite', actualite, (req, res) => {
-  res.status(200).json({ message: 'actualite cree avec succes', data: req.body })
-})
-router.post('/annonce', annonce, (req, res) => {
-  res.status(200).json({ message: 'annonce cree avec succes', data: req.body })
-})
 router.post('/upload-image', upload.single('image'), uploadImage)
-router.post('/login', logincheck, login,auth)
-router.post('/creeAdmin',(req,res)=>{})
+router.post('/login' ,logincheck, login,)
+router.post('/creeAdmin',checkDataCreat,NewAdmin)
+
 
 
 // =============================get routes ========================
@@ -32,7 +27,7 @@ router.get('/realisation', listElements(TARGETS.realisation))
 router.get('/actualite', listElements(TARGETS.actualite))
 router.get('/annonce', listElements(TARGETS.annonce))
 router.get('/stats', getStats)
-router.get('/_admim_jps@_3_',(req,res)=>{
+router.get('/_admin_jps@_3_',(req,res)=>{
   res.sendFile(path.join(__dirname,'../public/login.html'))
 })
 

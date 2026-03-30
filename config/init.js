@@ -6,7 +6,8 @@ db.serialize(() => {
         id INTEGER PRIMARY KEY AUTOINCREMENT,
         username TEXT NOT NULL UNIQUE,
         password TEXT NOT NULL,
-        role TEXT default 'admin'
+        role TEXT default 'admin',
+        created_at datetime default current_timestamp
     )`)
 
     db.run(`CREATE TABLE IF NOT EXISTS actualite (

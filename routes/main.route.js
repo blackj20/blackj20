@@ -30,9 +30,7 @@ router.get('/actualites', (req,res)=>{
 router.get('/annonce', (req,res)=>{
    res.sendFile(path.join(__dirname,'../public/annonce.html'))
 } )
-router.get('/login', (req,res)=>{
-   res.sendFile(path.join(__dirname,'../public/login.html'))
-} )
+
 // ==========================post routes ========================
 
 
