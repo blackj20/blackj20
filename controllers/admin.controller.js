@@ -58,6 +58,8 @@ const login = async (req, res) => {
     }
     
     const token= await tools.signeToken(user)
+
+    
     res.json(token)
   } catch (error) {
     

@@ -259,19 +259,7 @@ allImage=()=>{
       console.log(rows)
     })
 }
-// const createAdmin= async({username,hash})=>{
 
-  
-//   const password= await tools.cryptePassword(hash)
-//   const query=` insert  into user (username,password) values(?,?)`
-
-//   return new Promise((resolve, reject) => {
-//     db.run(query,[username,password],function (err) {
-//      const user = { id:this.lastID, username:username }
-//     resolve(user)
-  
-//   })
-// })
   
 const createAdmin=async ({username,hash})=>{// on cree les user avec le mot de pass hache
 

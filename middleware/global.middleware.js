@@ -59,6 +59,8 @@ const checkDataCreat = (req, res, next) => {
 const logincheck = (req, res, next) => {
   const { username, hash } = req.body
 
+  console.log( username, hash )
+
   if (!username || !hash) {
     res.status(403).json({ message: 'donne incorect' })
   } else if (req.path !== '/login') res.status(400).json({ message: "erruer chemin. On n'est perdue? :)" })

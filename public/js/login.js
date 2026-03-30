@@ -1,18 +1,26 @@
 const form = document.getElementById('admin-login')
 const feedback = document.getElementById('login-feedback')
 
+feedback.textContent = 'Connexion réussie, redirection...'
+feedback.classList.add('success')
+
 form?.addEventListener('submit', async (e) => {
     e.preventDefault()
+
     feedback.textContent = ''
     feedback.className = 'feedback'
     const data = Object.fromEntries(new FormData(form).entries())
-    if (!data.identifian || !data.password) {
+
+    alert(data)
+    if (!data.identifian || !data.hash) {
         feedback.textContent = 'Veuillez remplir tous les champs.'
         feedback.classList.add('error')
         return
     }
     try {
-        const res = await fetch('/admin/login', {
+
+        console.log(data)
+        const res = await fetch('http://localhost:8080/admin/login', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify(data)
@@ -27,3 +35,5 @@ form?.addEventListener('submit', async (e) => {
         feedback.classList.add('error')
     }
 })
+
+
