@@ -1,5 +1,29 @@
 // simolation data 
 
+const createSpinner = (containerId = "actualite_data") => {
+    const container = document.getElementById(containerId)
+    if (!container) return null
+
+    const body_ = document.createElement("div")
+    const message = document.createElement("p")
+    const spinner = document.createElement("span")
+    
+    spinner.className="spinner"
+    message.className="spinner_message"
+    message.textContent = "Chargement..."
+    body_.className="cart_spinner"
+
+    body_.append(spinner, message)
+    container.append(body_)
+
+    return {
+        show: (text = "Chargement...") => message.textContent = text,
+        remove: () => body_.remove()
+    }
+}
+
+const spinner = createSpinner()
+
 
 const getData=async()=>{//recuperaeation des donne au back
 
@@ -12,19 +36,22 @@ const getData=async()=>{//recuperaeation des donne au back
              body:JSON.stringify({data:"actualites"}) 
         })
 
-        const realisation= dataRealisation.json()
+        const data= await dataRealisation.json()
+        spinner?.remove()
 
-        if(!dataRealisation.ok) throw new Error(realisation.message);
+        if(!dataRealisation.ok) throw new Error(data.message);
 
-        loadindingImg(realisation)
+        loadindingImg(data)
         
     } catch (err) {
-        console.error( "echec lor du chargement des donnes")
+        console.error( "echec lor du chargement des donnes"+err)
+        spinner?.show("Échec du chargement")
     }
 
 }
 
 getData()
+
 
 const viewedImages = new Set()
 const normalizeImagePath = (path = '') => {
@@ -64,7 +91,7 @@ const annonce =(data,parent="actualiter",className_="cart")=>{ // createur d'ann
 }
 const loadindingImg=(data)=>{// on cree des poste en boucle
     data.forEach(elem => {
-       annonce(elem) 
+       poste(elem,parent="actualite_data") 
        
     });
 }
@@ -72,7 +99,7 @@ const poste=(data_api,parent="",ClassName="item",info_div="active")=>{
 
     if(!parent)return alert(" erreur arrét 'affichage  parent manquant !")
 
-    const { titre ,img,data_description,anneé,localisation }=data_api // on retire tout les donne du data 
+    const { titre,description,image  }=data_api // on retire tout les donne du data 
 
     const div_cart =document.createElement("div") // le contenneur
     const div_info =document.createElement("div") // le contenneur
@@ -80,7 +107,7 @@ const poste=(data_api,parent="",ClassName="item",info_div="active")=>{
     const icon_2=document.createElement("i")
     const  titre_=document.createElement("h3")   // titre de la realisation
     const  descrp= document.createElement("p")// description sur la realisation
-    const  image =document.createElement("img") // image de la realisation  
+    const  image_ =document.createElement("img") // image de la realisation  
     const icon_desc=document.createElement("i") // icon de description
 
     icon_desc.className="fas fa-info-circle"
@@ -89,52 +116,23 @@ const poste=(data_api,parent="",ClassName="item",info_div="active")=>{
 
 
     titre_.textContent=titre
-    const imgSrc = img || "image/logo.png"
-    image.src=imgSrc
-    if (img) registerImageView(imgSrc)
+    const imgSrc = image || "image/logo.png"
+    image_.src=imgSrc
+    if (image) registerImageView(imgSrc)
 
 
-    descrp.textContent=data_description||"aucune description pour le moment" 
+    descrp.textContent=description||"aucune description pour le moment" 
     descrp.prepend(icon_desc)
     div_info.append(titre_,descrp)
-    div_cart.append(image,div_info)
+    div_cart.append(image_,div_info)
 
     icon.className="fas fa-eye"
     icon_2.className="fas fa-map-marker-alt"
 
 
-    if (anneé) {
-    const year = document.createElement("p")
-    const icon = document.createElement("i")
-
-    icon.className = "fas fa-calendar"
-
-    year.textContent = ` année :`+anneé||"pas d'anneé"
-    year.prepend(icon)
-
-    div_info.append(year)
-    }
-    
-    if (localisation) {
-        const loc = document.createElement("p")
-        const icon_2 = document.createElement("i")
-    
-        icon_2.className = "fas fa-map-marker-alt"
-    
-        loc.textContent = ` localisation : ${localisation}`
-        loc.prepend(icon_2)
-    
-        div_info.append(loc)
-    }
     div_cart.addEventListener("click",()=>{
         div_info.classList.toggle("info")
     })
-
-
-     
-
     document.getElementById(parent).append(div_cart)
 }
 
-loadindingImg()
-loadindingImg(annonce_data)

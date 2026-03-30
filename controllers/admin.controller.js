@@ -102,6 +102,7 @@ const login = async (req, res) => {
     }
     res.json({ message: 'connecté', user: { id: user.id, username: user.username } })
   } catch (error) {
+    
     res.status(500).json({ message: 'erreur lors de la connexion', error: error.message })
   }
 }
