@@ -3,49 +3,48 @@ const router = express.Router()
 const path = require('path')
 const { realisation, actualite, annonce, uploadImage, listElements,NewAdmin, updateElement, deleteElement, TARGETS, getStats, login } = require('../controllers/admin.controller')
 const { upload } = require('../services/admin.service')
-const {  logincheck,isAdmin,auth }=require('../middleware/global.middleware')
+const {  logincheck,isAdmin,auth,checkDataCreat }=require('../middleware/global.middleware')
 
-// ================= get routre ==============================
+// Route publique: elle sert uniquement a creer la session admin.
+router.post('/login' ,logincheck, login,)
+// router.post('/creeAdmin',checkDataCreat,NewAdmin)
+// Route publique vers l'ecran de connexion admin.
+router.get('/_admin_jps@_3_',(req,res)=>{
+  res.sendFile(path.join(__dirname,'../public/login.html'))
+})
+
+// Toutes les routes suivantes exigent maintenant le cookie de session admin.
+router.use(auth, isAdmin)
+
+// ================= get route ==============================
 router.get('/', (req, res) => {
+  // Si on arrive ici, `auth` + `isAdmin` sont deja passes avant.
   res.sendFile(path.join(__dirname, '../public/admin.html'))
 })
 
 // =============================post routes ========================
 
-router.post('/realisation', realisation, (req, res) => {
-  res.status(200).json({ message: 'realisation cree avec succes', data: req.body })
-})
-router.post('/actualite', actualite, (req, res) => {
-  res.status(200).json({ message: 'actualite cree avec succes', data: req.body })
-})
-router.post('/annonce', annonce, (req, res) => {
-  res.status(200).json({ message: 'annonce cree avec succes', data: req.body })
-})
-router.post('/upload-image', upload.single('image'), uploadImage)
-router.post('/login', logincheck, login,auth)
-router.post('/creeAdmin',NewAdmin)
-
-
+router.post('/realisation', realisation) // Cree une realisation.
+router.post('/actualite', actualite) // Cree une actualite.
+router.post('/annonce', annonce) // Cree une annonce.
+router.post('/upload-image', upload.single('image'), uploadImage) // Upload une image.
 
 // =============================get routes ========================
-router.get('/images', listElements(TARGETS.images))
-router.get('/realisation', listElements(TARGETS.realisation))
-router.get('/actualite', listElements(TARGETS.actualite))
-router.get('/annonce', listElements(TARGETS.annonce))
-router.get('/stats', getStats)
-router.get('/_admim_jps@_3_',(req,res)=>{
-  res.sendFile(path.join(__dirname,'../public/login.html'))
-})
+router.get('/images', listElements(TARGETS.images)) // Liste les images.
+router.get('/realisation', listElements(TARGETS.realisation)) // Liste les realisations.
+router.get('/actualite', listElements(TARGETS.actualite)) // Liste les actualites.
+router.get('/annonce', listElements(TARGETS.annonce)) // Liste les annonces.
+router.get('/stats', getStats) // Retourne les stats admin.
 
 // ============================= put routes ========================
-router.put('/realisation/:id', updateElement(TARGETS.realisation))
-router.put('/actualite/:id', updateElement(TARGETS.actualite))
-router.put('/annonce/:id', updateElement(TARGETS.annonce))
+router.put('/realisation/:id', updateElement(TARGETS.realisation)) // Modifie une realisation.
+router.put('/actualite/:id', updateElement(TARGETS.actualite)) // Modifie une actualite.
+router.put('/annonce/:id', updateElement(TARGETS.annonce)) // Modifie une annonce.
 
 // ============================= delete routes =====================
-router.delete('/realisation/:id', deleteElement(TARGETS.realisation))
-router.delete('/actualite/:id', deleteElement(TARGETS.actualite))
-router.delete('/annonce/:id', deleteElement(TARGETS.annonce))
-router.delete('/images/:id', deleteElement(TARGETS.images))
+router.delete('/realisation/:id', deleteElement(TARGETS.realisation)) // Supprime une realisation.
+router.delete('/actualite/:id', deleteElement(TARGETS.actualite)) // Supprime une actualite.
+router.delete('/annonce/:id', deleteElement(TARGETS.annonce)) // Supprime une annonce.
+router.delete('/images/:id', deleteElement(TARGETS.images)) // Supprime une image.
 
 module.exports = router

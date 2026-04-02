@@ -57,57 +57,80 @@ const checkDataCreat = (req, res, next) => {
 }
 // ------------------------ check login --------------------------
 const logincheck = (req, res, next) => {
+  // On extrait les champs attendus depuis le body JSON du login.
   const { username, hash } = req.body
 
-  console.log( username, hash )
-
+  // Si un des deux champs manque, inutile d'aller plus loin.
   if (!username || !hash) {
     res.status(403).json({ message: 'donne incorect' })
+  // On s'assure que ce middleware ne sert bien qu'a la route /login.
   } else if (req.path !== '/login') res.status(400).json({ message: "erruer chemin. On n'est perdue? :)" })
+  // Ce controle evite les methodes inattendues sur cette route.
   else if (req.method !== 'POST') res.status(400).json({ message: "erruer methode . ici tu donne pas l'inverse  :)" })
   else {
+    // Tout est bon: on laisse le controller de login travailler.
     next()
   }
 }
 // -------------------------- main auth --------------------------
 const auth = async (req, res, next) => {
-  const header = req.headers.authorization
+  // On lit d'abord le cookie, puis `Authorization` en secours.
+  const token = tools.getTokenFromRequest(req)
 
-  if (!header) return res.status(401).json({ message: ' pas de token ' })
-
-  const token = header.split(' ')[1]
+  // Sans token, la route admin doit etre refusee.
+  if (!token) return res.status(403).json({ message: 'pas de token' })
 
   try {
+    // Le helper verifie la signature et retourne les infos du JWT.
     const user = tools.decoded(token)
-    console.log(user)
 
+    // On garde l'utilisateur sur la requete pour les middlewares suivants.
+    req.user = user
+    // On garantit que `req.body` existe meme sur un GET.
+    req.body = req.body || {}
+    // Compatibilite avec l'ancien code qui lisait `req.body.user`.
+    req.body.user = user
+
+    // La requete est authentifiee, on passe a la suite.
     next()
   } catch (err) {
-    return res.status(403).json({ message: 'invalid or expired token' + err })
+    // Token invalide, mal signe ou expire.
+    return res.status(403).json({ message: 'invalid or expired token: ' + err.message })
   }
 }
 
 // ------------------------------ admin --------------------------
 
 const isAdmin = (req, res, next) => {
-    if(!req.body){
-        return res.status(400).json({ message: 'page reserve pour admins .' })
-    }
+  // On privilegie `req.user`, sinon on garde le fallback existant.
+  const user = req.user || req.body.user
 
-  if (!req.body.user.role === 'admin') res.status(403).json({ message: 'page reserve au admins .' })
+  // Si aucun utilisateur n'est injecte, la verif precedente n'a pas abouti.
+  if (!user) {
+    return res.status(400).json({ message: 'page reserve pour admins .' })
+  }
+
+  // Ici on verrouille les routes reservees au role admin.
+  if (user.role !== 'admin') {
+    return res.status(403).json({ message: 'page reserve aux admins .' })
+  }
+
+  // Tout est bon: l'utilisateur est bien admin.
   next()
 }
 
 const checkCoockie = (req, res, next) => {
-  const token = req.cookies.token
+  // Ce middleware réutilise exactement la meme lecture que `auth`.
+  const token = tools.getTokenFromRequest(req)
 
   if (!token) return res.status(401).json({ message: ' pas de token ' })
   try {
-    const user = decoded(token)
+    // On decode le JWT puis on l'accroche a la requete.
+    const user = tools.decoded(token)
     req.user = user
     next()
   } catch (err) {
-    return res.status(403).json({ message: 'invalid or expired token' + err })
+    return res.status(403).json({ message: 'invalid or expired token: ' + err.message })
   }
 }
 

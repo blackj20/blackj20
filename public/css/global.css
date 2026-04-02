@@ -296,11 +296,11 @@ footer,
 }
 .search-btn i{ pointer-events: none; }
 
-@media (max-width: 600px){
+@media (max-width: 700px){
     .search-bar{
         
         margin-left: 140px;
-        width: 350px;
+        width: 250px;
         display: flex;
       
     }

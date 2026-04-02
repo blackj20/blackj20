@@ -41,28 +41,34 @@ const annonce = async (req, res) => {
 
 // -------------------------------- login simple ----------------------------------
 const login = async (req, res) => {
+  // On lit les identifiants envoyes par le formulaire de connexion.
   const { username, hash } = req.body
 
   try {
+    // On recupere l'utilisateur correspondant en base.
     const user = await srv.getUserByIdentifiant(username)
 
-    console.log(user)
-
+    // On compare le mot de passe saisi avec le hash stocke.
     const check = await tools.comparePassword(hash,user)
 
-    console.log(check)
-    
-
+    // Si la comparaison echoue, on stoppe ici.
     if (check!==true) {
       return res.status(401).json({ message: 'identifiants invalides' })
     }
     
-    const token= await tools.signeToken(user)
+    // On genere un JWT signe pour cet utilisateur.
+    const token = tools.signeToken(user)
+    
+    // On envoie le JWT dans un cookie HTTP-only via le header `Set-Cookie`.
+    // Le navigateur stocke ce cookie automatiquement apres le login.
+    tools.setAuthCookie(res, token)
 
+    // On repond simplement OK: le front n'a plus besoin de stocker le token lui-meme.
+    res.json({ message: 'connexion reussie' })
     
-    res.json(token)
+
   } catch (error) {
-    
+    // Toute erreur imprevue tombe ici (base, JWT, etc.).
     res.status(500).json({ message: 'erreur lors de la connexion', error: error.message })
   }
 }
@@ -147,7 +153,7 @@ const NewAdmin= async(req,res)=>{
     res.status(200).json(user)
   } catch (err) {
     res.status(500).json({message:"une erreur se produit: "+err})
-
+  
     
   }
 

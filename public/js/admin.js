@@ -45,13 +45,25 @@ const showToast = (message, type = 'info') => {
 }
 
 const fetchJSON = async (url, options = {}) => {
-  const res = await fetch(url, options)
+  // On reconstruit les options pour imposer l'envoi du cookie admin partout.
+  const finalOptions = {
+    ...options,
+    // Chaque action admin renvoie automatiquement le cookie vers le serveur.
+    credentials: 'same-origin'
+  }
+
+  // Toutes les requetes admin passent par ce `fetch`.
+  const res = await fetch(url, finalOptions)
+  // On lit d'abord le texte brut pour gerer aussi les reponses vides.
   const text = await res.text()
+  // Si le corps contient du JSON, on le parse.
   const data = text ? JSON.parse(text) : null
   if (!res.ok) {
+    // On privilegie le message metier du serveur.
     const msg = data?.message || res.statusText
     throw new Error(msg)
   }
+  // Sinon on retourne la donnee deja parsee.
   return data
 }
 
