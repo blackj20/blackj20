@@ -1,5 +1,5 @@
 const tools=require('../utils/tootls.utils')
-
+const { getUserByIdentifiant}=require('../services/admin.service')
 const routeRequette=(req,res,next)=>{ // on coute tout demmend extern
 
     const auth=["accueil","realisation","actualites","annonce"]
@@ -101,8 +101,14 @@ const auth = async (req, res, next) => {
 
 // ------------------------------ admin --------------------------
 
-const isAdmin = (req, res, next) => {
+const isAdmin = async(req, res, next) => {
+
   // On privilegie `req.user`, sinon on garde le fallback existant.
+  const token= tools.getTokenFromRequest(req)
+  const name_admin=tools.decoded(token)
+  const result = await  getUserByIdentifiant(name_admin.username)
+  result!==true?res.status(403).json({ message: 'erreur token phantom .' }): res.status(200)
+
   const user = req.user || req.body.user
 
   // Si aucun utilisateur n'est injecte, la verif precedente n'a pas abouti.

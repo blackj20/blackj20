@@ -5,11 +5,12 @@ const { realisation, actualite, annonce, uploadImage, listElements,NewAdmin, upd
 const { upload } = require('../services/admin.service')
 const {  logincheck,isAdmin,auth,checkDataCreat }=require('../middleware/global.middleware')
 
+
 // Route publique: elle sert uniquement a creer la session admin.
 router.post('/login' ,logincheck, login,)
-// router.post('/creeAdmin',checkDataCreat,NewAdmin)
+router.post('/creeAdmin',checkDataCreat,NewAdmin)
 // Route publique vers l'ecran de connexion admin.
-router.get('/_admin_jps@_3_',(req,res)=>{
+router.get('/_admin_jps@_3_' ,(req,res)=>{
   res.sendFile(path.join(__dirname,'../public/login.html'))
 })
 

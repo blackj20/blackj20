@@ -188,7 +188,7 @@ const getUserByIdentifiant = (identifian) => {
   return new Promise((resolve, reject) => {
     db.get('SELECT * FROM users WHERE username=?', [identifian], (err, row) => {
       if (err) return reject(err)
-      resolve(row || null)
+      row?resolve(true):resolve(false)
     })
   })
 }
@@ -271,7 +271,9 @@ const createAdmin=async ({username,hash})=>{// on cree les user avec le mot de p
     return new Promise((resolve, reject) => {
         db.run( `insert into users(username,password) values(?,?)`,
             [username,password],function(err){
-                if (err.message.includes(" UNIQUE")) return reject("erruer cet compte existe deja essayer plustot de vous connecter")
+
+                // if (err.message.includes(" UNIQUE")) return reject("erruer cet compte existe deja essayer plustot de vous connecter")
+
                 const user={
                             username:username,
                             id:this.lastID,

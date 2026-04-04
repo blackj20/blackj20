@@ -15,7 +15,7 @@ router.get('/', (req,res)=>{
    res.sendFile(path.join(__dirname,'../public/accueil.html'))
 } )
 router.get('/apropos', (req,res)=>{
-   res.sendFile(path.join(__dirname,'../public/apropos.html'))
+   res.sendFile(path.join(__dirname,'../public/about.html'))
 } )
 router.get('/service', (req,res)=>{
    res.sendFile(path.join(__dirname,'../public/service.html'))
