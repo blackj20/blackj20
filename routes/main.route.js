@@ -24,7 +24,7 @@ router.get('/realisation', (req,res)=>{
    res.sendFile(path.join(__dirname,'../public/realisation.html'))
 } )
 router.get('/actualites', (req,res)=>{
-   res.sendFile(path.join(__dirname,'../public/actualites.html'))
+   res.sendFile(path.join(__dirname,'../public/actualiter.html'))
 
 } )
 router.get('/annonce', (req,res)=>{

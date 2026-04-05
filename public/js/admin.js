@@ -5,6 +5,12 @@ const state = {
     realisation: null,
     actualite: null,
     annonce: null
+  },
+  rows: {
+    images: [],
+    realisation: [],
+    actualite: [],
+    annonce: []
   }
 }
 
@@ -34,6 +40,7 @@ const counters = {
 }
 
 const topImagesList = qs('#topImages')
+const logoutButton = qs('#logoutBtn')
 
 const toast = qs('#toast')
 
@@ -57,19 +64,43 @@ const fetchJSON = async (url, options = {}) => {
   // On lit d'abord le texte brut pour gerer aussi les reponses vides.
   const text = await res.text()
   // Si le corps contient du JSON, on le parse.
-  const data = text ? JSON.parse(text) : null
+  let data = null
+  try {
+    data = text ? JSON.parse(text) : null
+  } catch {
+    data = text ? { message: text } : null
+  }
   if (!res.ok) {
     // On privilegie le message metier du serveur.
     const msg = data?.message || res.statusText
+    if (res.status === 401 || res.status === 403) {
+      setTimeout(() => { window.location.href = '/admin/login' }, 700)
+    }
     throw new Error(msg)
   }
   // Sinon on retourne la donnee deja parsee.
   return data
 }
 
+const normalizeRealisation = (row) => ({
+  ...row,
+  annee: row.annee || row['anneé'] || ''
+})
+
+const formatDate = (value) => {
+  if (!value) return ''
+  const date = new Date(value)
+  if (Number.isNaN(date.getTime())) return value
+  return new Intl.DateTimeFormat('fr-FR', {
+    dateStyle: 'medium',
+    timeStyle: 'short'
+  }).format(date)
+}
+
 // -------------- Images -----------------
 const loadImages = async () => {
   const data = await fetchJSON(`${API_BASE}/images`)
+  state.rows.images = data
   counters.images.textContent = data.length
   lists.images.innerHTML = data
     .map(({ id, path, filename }) => `
@@ -141,7 +172,14 @@ const renderTable = (type, rows, columns) => {
   lists[type].innerHTML = rows
     .map((row) => {
       const cells = columns
-        .map((col) => `<td>${row[col] ?? ''}</td>`)
+        .map((col) => {
+          if (typeof col === 'string') {
+            return `<td>${row[col] ?? ''}</td>`
+          }
+
+          const value = row[col.key]
+          return `<td>${col.render ? col.render(value, row) : (value ?? '')}</td>`
+        })
         .join('')
       return `
         <tr data-id="${row.id}">
@@ -159,17 +197,32 @@ const renderTable = (type, rows, columns) => {
 // -------------- Realisations -----------------
 const loadRealisations = async () => {
   const data = await fetchJSON(`${API_BASE}/realisation`)
-  renderTable('realisation', data, ['anneé', 'localisation', 'titre', 'description', 'image'])
+  state.rows.realisation = data.map(normalizeRealisation)
+  renderTable('realisation', state.rows.realisation, [
+    'annee',
+    'localisation',
+    'titre',
+    'description',
+    'image',
+    { key: 'created_at', render: (value) => formatDate(value) }
+  ])
 }
 
 const handleRealSubmit = async (e) => {
   e.preventDefault()
   const payload = serializeForm(forms.realisation)
+  const id = state.editing.realisation
+  const currentItem = state.rows.realisation.find((item) => String(item.id) === String(id))
+
   if (forms.realisation.imageFile?.files?.[0]) {
     payload.image = await uploadAndGetUrl(forms.realisation.imageFile.files[0])
+  } else if (currentItem?.image) {
+    payload.image = currentItem.image
+  } else {
+    showToast('Veuillez choisir une image pour la réalisation', 'error')
+    return
   }
   delete payload.imageFile
-  const id = state.editing.realisation
   const method = id ? 'PUT' : 'POST'
   const url = `${API_BASE}/realisation${id ? `/${id}` : ''}`
 
@@ -190,17 +243,30 @@ const handleRealSubmit = async (e) => {
 // -------------- Actualités -----------------
 const loadActualites = async () => {
   const data = await fetchJSON(`${API_BASE}/actualite`)
-  renderTable('actualite', data, ['titre', 'description', 'image'])
+  state.rows.actualite = data
+  renderTable('actualite', state.rows.actualite, [
+    'titre',
+    'description',
+    'image',
+    { key: 'created_at', render: (value) => formatDate(value) }
+  ])
 }
 
 const handleActuSubmit = async (e) => {
   e.preventDefault()
   const payload = serializeForm(forms.actualite)
+  const id = state.editing.actualite
+  const currentItem = state.rows.actualite.find((item) => String(item.id) === String(id))
+
   if (forms.actualite.imageFile?.files?.[0]) {
     payload.image = await uploadAndGetUrl(forms.actualite.imageFile.files[0])
+  } else if (currentItem?.image) {
+    payload.image = currentItem.image
+  } else {
+    showToast('Veuillez choisir une image pour l’actualité', 'error')
+    return
   }
   delete payload.imageFile
-  const id = state.editing.actualite
   const method = id ? 'PUT' : 'POST'
   const url = `${API_BASE}/actualite${id ? `/${id}` : ''}`
 
@@ -221,7 +287,12 @@ const handleActuSubmit = async (e) => {
 // -------------- Annonces -----------------
 const loadAnnonces = async () => {
   const data = await fetchJSON(`${API_BASE}/annonce`)
-  renderTable('annonce', data, ['titre', 'message', 'created_at'])
+  state.rows.annonce = data
+  renderTable('annonce', state.rows.annonce, [
+    'titre',
+    'message',
+    { key: 'created_at', render: (value) => formatDate(value) }
+  ])
 }
 
 const handleAnnonceSubmit = async (e) => {
@@ -247,19 +318,8 @@ const handleAnnonceSubmit = async (e) => {
 
 // -------------- Global actions -----------------
 const handleEditClick = (type, id) => {
-  const row = qs(`[data-id="${id}"]`)
-  if (!row) return
-
-  const map = {
-    realisation: ['anneé', 'localisation', 'titre', 'description', 'image'],
-    actualite: ['titre', 'description', 'image'],
-    annonce: ['titre', 'message', 'created_at']
-  }
-  const item = { id }
-  map[type].forEach((key, idx) => {
-    const cell = row.children[idx]
-    if (cell) item[key] = cell.textContent
-  })
+  const item = state.rows[type].find((entry) => String(entry.id) === String(id))
+  if (!item) return
   enterEditMode(type, item)
   window.scrollTo({ top: forms[type].offsetTop - 20, behavior: 'smooth' })
 }
@@ -309,12 +369,23 @@ const loadStats = async () => {
     .join('') || '<li class="muted">Pas encore de vues</li>'
 }
 
+const handleLogout = async () => {
+  try {
+    await fetchJSON(`${API_BASE}/logout`, { method: 'POST' })
+  } catch (err) {
+    showToast(err.message, 'error')
+  } finally {
+    window.location.href = '/admin/login'
+  }
+}
+
 // -------------- Init -----------------
 const init = () => {
   forms.image?.addEventListener('submit', handleImageSubmit)
   forms.realisation?.addEventListener('submit', handleRealSubmit)
   forms.actualite?.addEventListener('submit', handleActuSubmit)
   forms.annonce?.addEventListener('submit', handleAnnonceSubmit)
+  logoutButton?.addEventListener('click', handleLogout)
 
   qsa('tbody').forEach((tbody) => tbody.addEventListener('click', handleTableClick))
   lists.images?.addEventListener('click', handleTableClick)

@@ -9,10 +9,6 @@ const ONE_DAY_IN_MS = 1000 * 60 * 60 * 24
 // Ici on garde la session admin 7 jours.
 const AUTH_COOKIE_MAX_AGE = 7 * ONE_DAY_IN_MS
 
-
-
-console.log(` le secret ${JWT_SECRET} expire en ${JWT_EXPIRES_IN}`)
-
 const decoded=(token)=>{ // verification du token 
         // `verify` controle la signature et l'expiration du JWT.
         return jwt.verify(token,JWT_SECRET )

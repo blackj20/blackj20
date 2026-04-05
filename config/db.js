@@ -1,13 +1,18 @@
-const sqlt=require('sqlite3')
-const { DB_PATH }=process.env
-console.log(typeof(DB_PATH))
+require('dotenv').config()
 
-const db=new sqlt.Database(DB_PATH,(err)=>{
-    if(err){
+const path = require('path')
+const sqlite3 = require('sqlite3')
 
-        console.log('Error connecting to database',err)
-    }else{
-        console.log('Connected to database '+DB_PATH)
-    }
+const resolvedDbPath = process.env.DB_PATH
+  ? path.resolve(process.cwd(), process.env.DB_PATH)
+  : path.join(process.cwd(), 'EMC_sarlu.db')
+
+const db = new sqlite3.Database(resolvedDbPath, (err) => {
+  if (err) {
+    console.log('Error connecting to database', err)
+  } else {
+    console.log('Connected to database ' + resolvedDbPath)
+  }
 })
-module.exports=db
+
+module.exports = db

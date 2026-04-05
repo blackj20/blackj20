@@ -9,18 +9,19 @@
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
 </head>
 <body class="admin-body">
-  <header class="admin-header">
-    <div class="brand">
-      <img src="image/logo.png" alt="EMC Construction" class="logo">
-      <div>
-        <p class="kicker">Tableau de bord</p>
-        <h1>Administration EMC</h1>
-      </div>
-    </div>
-    <nav class="admin-nav">
-      <a href="/" class="pill">Retour au site</a>
-    </nav>
-  </header>
+	  <header class="admin-header">
+	    <div class="brand">
+	      <img src="image/logo.png" alt="EMC Construction" class="logo">
+	      <div>
+	        <p class="kicker">Tableau de bord</p>
+	        <h1>Administration EMC</h1>
+	      </div>
+	    </div>
+	    <nav class="admin-nav">
+	      <a href="/" class="pill">Retour au site</a>
+	      <button type="button" id="logoutBtn" class="pill pill-danger">Déconnexion</button>
+	    </nav>
+	  </header>
 
   <main class="admin-main">
     <section class="card hero">
@@ -81,23 +82,23 @@
           <span>Description</span>
           <input type="text" name="description" placeholder="Quelques mots" required>
         </label>
-        <label class="field">
-          <span>Image (fichier)</span>
-          <input type="file" name="imageFile"  required>
-        </label>
-        <button type="submit" class="btn primary">Enregistrer</button>
-      </form>
+	        <label class="field">
+	          <span>Image (fichier)</span>
+	          <input type="file" name="imageFile">
+	        </label>
+	        <button type="submit" class="btn primary">Enregistrer</button>
+	      </form>
 
-      <div class="table-wrap">
-        <table class="data-table">
-          <thead>
-            <tr>
-              <th>Année</th><th>Localisation</th><th>Titre</th><th>Description</th><th>Image</th><th></th>
-            </tr>
-          </thead>
-          <tbody id="realisationBody"></tbody>
-        </table>
-      </div>
+	      <div class="table-wrap">
+	        <table class="data-table">
+	          <thead>
+	            <tr>
+	              <th>Année</th><th>Localisation</th><th>Titre</th><th>Description</th><th>Image</th><th>Créé le</th><th></th>
+	            </tr>
+	          </thead>
+	          <tbody id="realisationBody"></tbody>
+	        </table>
+	      </div>
     </section>
 
     <section class="card" id="actualite">
@@ -118,23 +119,23 @@
           <span>Description</span>
           <input type="text" name="description" required>
         </label>
-        <label class="field">
-          <span>Image (fichier)</span>
-          <input type="file" name="imageFile" required>
-        </label>
-        <button type="submit" class="btn primary">Enregistrer</button>
-      </form>
+	        <label class="field">
+	          <span>Image (fichier)</span>
+	          <input type="file" name="imageFile">
+	        </label>
+	        <button type="submit" class="btn primary">Enregistrer</button>
+	      </form>
 
-      <div class="table-wrap">
-        <table class="data-table">
-          <thead>
-            <tr>
-              <th>Titre</th><th>Description</th><th>Image</th><th></th>
-            </tr>
-          </thead>
-          <tbody id="actualiteBody"></tbody>
-        </table>
-      </div>
+	      <div class="table-wrap">
+	        <table class="data-table">
+	          <thead>
+	            <tr>
+	              <th>Titre</th><th>Description</th><th>Image</th><th>Créé le</th><th></th>
+	            </tr>
+	          </thead>
+	          <tbody id="actualiteBody"></tbody>
+	        </table>
+	      </div>
     </section>
 
     <section class="card" id="annonce">

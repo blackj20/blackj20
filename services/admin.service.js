@@ -58,9 +58,27 @@ const ensureTableAllowed = (table) => {
   return table
 }
 
+const getSelectClause = (table) => {
+  if (table === 'annonce') return 'rowid as id, *'
+  if (table === 'realisation') return '*, "anneé" as annee'
+  return '*'
+}
+
+const getOrderClause = (table) => {
+  if (table === 'annonce') {
+    return ' ORDER BY datetime(created_at) DESC, rowid DESC'
+  }
+
+  if (['actualite', 'realisation', 'images'].includes(table)) {
+    return ' ORDER BY datetime(created_at) DESC, id DESC'
+  }
+
+  return ''
+}
+
 const creeUnactualiter = ({ titre, description, image }) => {
   return new Promise((resolve, reject) => {
-    const query = 'insert into actualite (titre,description,image) values(?,?,?)'
+    const query = 'insert into actualite (titre,description,image,created_at) values(?,?,?,CURRENT_TIMESTAMP)'
     db.run(query, [titre, description, image], function (err) {
       if (err) return reject('une erreur se produit ' + err)
 
@@ -77,12 +95,13 @@ const creeUnactualiter = ({ titre, description, image }) => {
 const creeUnrealisation = ({ anneé, annee, titre, description, localisation, image }) => {
   const yearValue = anneé || annee
   return new Promise((resolve, reject) => {
-    const query = 'insert into realisation (anneé,titre,description,localisation,image) values(?,?,?,?,?)'
+    const query = 'insert into realisation (anneé,titre,description,localisation,image,created_at) values(?,?,?,?,?,CURRENT_TIMESTAMP)'
     db.run(query, [yearValue, titre, description, localisation, image], function (err) {
       if (err) return reject('une erreur se produit ' + err)
 
       resolve({
         id: this.lastID,
+        annee: yearValue,
         anneé: yearValue,
         titre,
         description,
@@ -112,10 +131,8 @@ const creeUnannonce = ({ titre, message }) => {
 const getAllElement = (target) => {
   
   const table = ensureTableAllowed(target)
-
-  const selectId = table === 'annonce' ? 'rowid as id, *' : '*'
-  
-  const query = `select ${selectId} from ${table}`
+  const selectId = getSelectClause(table)
+  const query = `select ${selectId} from ${table}${getOrderClause(table)}`
   return new Promise((resolve, reject) => {
     db.all(query, function (err, rows) {
       if (err) return reject('une erreur se produit ' + err)
@@ -188,7 +205,7 @@ const getUserByIdentifiant = (identifian) => {
   return new Promise((resolve, reject) => {
     db.get('SELECT * FROM users WHERE username=?', [identifian], (err, row) => {
       if (err) return reject(err)
-      row?resolve(true):resolve(false)
+      resolve(row || null)
     })
   })
 }
@@ -271,6 +288,7 @@ const createAdmin=async ({username,hash})=>{// on cree les user avec le mot de p
     return new Promise((resolve, reject) => {
         db.run( `insert into users(username,password) values(?,?)`,
             [username,password],function(err){
+                if (err) return reject(err)
 
                 // if (err.message.includes(" UNIQUE")) return reject("erruer cet compte existe deja essayer plustot de vous connecter")
 

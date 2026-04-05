@@ -48,6 +48,10 @@ const login = async (req, res) => {
     // On recupere l'utilisateur correspondant en base.
     const user = await srv.getUserByIdentifiant(username)
 
+    if (!user) {
+      return res.status(401).json({ message: 'identifiants invalides' })
+    }
+
     // On compare le mot de passe saisi avec le hash stocke.
     const check = await tools.comparePassword(hash,user)
 
@@ -71,6 +75,11 @@ const login = async (req, res) => {
     // Toute erreur imprevue tombe ici (base, JWT, etc.).
     res.status(500).json({ message: 'erreur lors de la connexion', error: error.message })
   }
+}
+
+const logout = (req, res) => {
+  tools.clearAuthCookie(res)
+  res.json({ message: 'deconnexion reussie' })
 }
 
 
@@ -171,5 +180,6 @@ module.exports = {
   deleteElement,
   TARGETS,
   getStats,
-  login
+  login,
+  logout
 }

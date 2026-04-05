@@ -46,6 +46,25 @@ const registerImageView = (path) => {
     }).catch(() => {})
 }
 
+const getPostTimestamp = ({ created_at, annee, ['anneé']: anneeAccent }) => {
+    const directTime = created_at ? new Date(created_at).getTime() : NaN
+    if (!Number.isNaN(directTime)) return directTime
+
+    const yearMatch = String(annee || anneeAccent || '').match(/\d{4}/)
+    return yearMatch ? new Date(`${yearMatch[0]}-01-01T00:00:00`).getTime() : 0
+}
+
+const getDisplayDate = ({ created_at, annee, ['anneé']: anneeAccent }) => {
+    if (created_at) {
+        const date = new Date(created_at)
+        if (!Number.isNaN(date.getTime())) {
+            return new Intl.DateTimeFormat('fr-FR', { dateStyle: 'medium', timeStyle: 'short' }).format(date)
+        }
+    }
+
+    return annee || anneeAccent || ''
+}
+
 const getData=async()=>{//recuperaeation des donne au back
 
     try {
@@ -59,7 +78,9 @@ const getData=async()=>{//recuperaeation des donne au back
         })
 
         const realisation = await dataRealisation.json()
-        allRealisations = Array.isArray(realisation) ? realisation : []
+        allRealisations = Array.isArray(realisation)
+            ? [...realisation].sort((first, second) => getPostTimestamp(second) - getPostTimestamp(first))
+            : []
 
         if(!dataRealisation.ok) throw new Error(realisation.message);
 
@@ -79,7 +100,8 @@ const poste=(data_api,parent="",ClassName="item",info_div="active")=>{
 
     if(!parent)return alert(" erreur arrét 'affichage  parent manquant !")
 
-    const {anneé,localisation,titre,description,image }=data_api // on retire tout les donne du data 
+    const {annee, anneé, localisation, titre, description, image }=data_api // on retire tout les donne du data 
+    const yearValue = annee || anneé
 
     const div_cart =document.createElement("div") // le contenneur
     const div_info =document.createElement("div") // le contenneur
@@ -109,16 +131,16 @@ const poste=(data_api,parent="",ClassName="item",info_div="active")=>{
     icon_2.className="fas fa-map-marker-alt"
 
 
-    if (anneé) {
-    const year = document.createElement("p")
-    const icon = document.createElement("i")
+    if (yearValue || data_api.created_at) {
+        const year = document.createElement("p")
+        const icon = document.createElement("i")
 
-    icon.className = "fas fa-calendar"
+        icon.className = "fas fa-calendar"
 
-    year.textContent = ` année :`+anneé||"pas d'anneé"
-    year.prepend(icon)
+        year.textContent = ` date : ${getDisplayDate(data_api)}`
+        year.prepend(icon)
 
-    div_info.append(year)
+        div_info.append(year)
     }
     
     if (localisation) {
@@ -166,8 +188,8 @@ const applySearch = () => {
     const input = document.getElementById('accrp')
     const term = input?.value?.toLowerCase().trim() || ''
     if (!term) return loadindingImg(allRealisations)
-    const filtered = allRealisations.filter(({ titre='', localisation='', anneé='', description='' }) => {
-        return [titre, localisation, anneé, description].some((field) => (field || '').toLowerCase().includes(term))
+    const filtered = allRealisations.filter(({ titre='', localisation='', annee='', ['anneé']: anneeAccent='', description='' }) => {
+        return [titre, localisation, annee, anneeAccent, description].some((field) => (field || '').toLowerCase().includes(term))
     })
     loadindingImg(filtered)
 }
