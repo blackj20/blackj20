@@ -16,6 +16,12 @@ router.get('/_admin_jps@_3_' ,(req,res)=>{
   res.sendFile(path.join(__dirname,'../public/login.html'))
 })
 
+// la pege de'erreur 
+
+router.get('/erreur' ,(req,res)=>{
+  res.sendFile(path.join(__dirname,'../public/not found.html'))
+})
+
 // ================= get route ==============================
 router.get('/', auth, isAdmin, (req, res) => {
   // Si on arrive ici, `auth` + `isAdmin` sont deja passes avant.

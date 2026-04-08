@@ -131,13 +131,13 @@ const poste=(data_api,parent="",ClassName="item",info_div="active")=>{
     icon_2.className="fas fa-map-marker-alt"
 
 
-    if (yearValue || data_api.created_at) {
+    if (yearValue || data_api.année) {
         const year = document.createElement("p")
         const icon = document.createElement("i")
 
         icon.className = "fas fa-calendar"
 
-        year.textContent = ` date : ${getDisplayDate(data_api)}`
+        year.textContent = ` date : ${yearValue}`
         year.prepend(icon)
 
         div_info.append(year)

@@ -144,7 +144,7 @@ const poste=(data_api,parent="",ClassName="item",info_div="active")=>{
 
         icon.className = "fas fa-calendar"
 
-        year.textContent = ` date : ${getDisplayDate(data_api)}`
+        year.textContent = ` date : ${yearValue}`
         year.prepend(icon)
 
         div_info.append(year)
