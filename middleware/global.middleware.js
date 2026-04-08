@@ -112,7 +112,7 @@ const isAdmin = async(req, res, next) => {
   const dbUser = await getUserByIdentifiant(user.username)
 
   if (!dbUser) {
-    return res.status(403).json({ message: 'erreur token phantom .' })
+    return res.status(403).json({ message: 'erreur token phantom ce token na pas de user il ne passera jamais.' })
   }
 
   // Ici on verrouille les routes reservees au role admin.
