@@ -280,6 +280,7 @@ footer,
 }
 .search-input::placeholder{ color: rgba(246,246,246,0.6); }
 .search-btn{
+    margin-right: 40px;
     height: 44px;
     padding: 0 14px;
     border-radius: 12px;
@@ -297,16 +298,7 @@ footer,
 .search-btn i{ pointer-events: none; }
 
 @media (max-width: 700px){
-    .search-bar{
-        
-        margin-left: 140px;
-        width: 250px;
-        display: flex;
-      
-    }
-    .search-input{
-        flex: 1 1 100%;
-        width:150px;
-    }
+    .search-bar{ width: 350px; display: flex; margin-left: 50px; }
+    .search-input{flex: 1 1 100%; width:150px; }
     
 }

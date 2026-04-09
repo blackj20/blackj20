@@ -10,7 +10,7 @@ const {  logincheck,isAdmin,auth,checkDataCreat }=require('../middleware/global.
 router.post('/login' ,logincheck, login,)
 // Route publique vers l'ecran de connexion admin.
 
-router.get('/_admin_login_3_' ,(req,res)=>{
+router.get('/login_3' ,(req,res)=>{
   res.sendFile(path.join(__dirname,'../public/login.html'))
 })
 
@@ -19,15 +19,16 @@ router.get('/_admin_login_3_' ,(req,res)=>{
 
 
 // ================= get route ==============================
-router.get('/', (req, res) => {
+router.get('/',auth,isAdmin, (req, res) => {
   // Si on arrive ici, `auth` + `isAdmin` sont deja passes avant.
   res.sendFile(path.join(__dirname, '../public/admin.html'))
 })  
 // Toutes les routes suivantes exigent maintenant le cookie de session admin.
-
-router.use(auth, isAdmin)
 router.post('/creeAdmin',checkDataCreat,NewAdmin)
 
+router.use(auth, isAdmin)
+
+// router.post('/creeAdmin',checkDataCreat,NewAdmin)
 router.post('/logout', logout)
 
 // =============================post routes ========================

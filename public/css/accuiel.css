@@ -136,24 +136,9 @@ footer ul {
 
 
 @media (max-width: 600px) {
-
-    .cart {
-        grid-template-columns: 1fr;
-        width: 100%;
-
-    }
-
-    .container {
-        grid-template-columns: 1fr;
-    }
-    .cart img {
- 
-        width: 100%;
-    }
-    .cart{
-        width: 80%;
-        border-radius: 15px;
-        margin-left: 8%;
-        margin-bottom: 10px;
-    }
+    .cart { grid-template-columns: 1fr; width: 100%;}
+    .container {grid-template-columns: 1fr;}
+    .cart img {width: 100%;}
+    .cart{width: 80%;border-radius: 15px;margin-left: 8%;margin-bottom: 10px;}
+    .item >.info {backdrop-filter: blur(1px);border:none; margin-left: 5.5px;}
 }
