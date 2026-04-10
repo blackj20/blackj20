@@ -2,10 +2,10 @@ const express = require('express');
 const app =require('./app')
 
 
-const PORT = process.env.PORT || 3000;
+const {PORT, url}= process.env
 
 app.listen(PORT, '0.0.0.0',() => {
-    console.log(`serveur lanser au port ${PORT} cliquez le lien pour rejoindre http://localhost:${PORT} ctrl+c pour stoper le serveur`);
+    console.log(`serveur lanser au port ${PORT} cliquez le lien pour rejoindre ${url}:${PORT} ctrl+c pour stoper le serveur`);
 }); 
 
 // done!!

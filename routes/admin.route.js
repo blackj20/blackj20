@@ -21,7 +21,7 @@ router.get('/login_3' ,(req,res)=>{
 // ================= get route ==============================
 router.get('/',auth,isAdmin, (req, res) => {
   // Si on arrive ici, `auth` + `isAdmin` sont deja passes avant.
-  res.sendFile(path.join(__dirname, '../public/admin.html'))
+  res.sendFile(path.join(__dirname,'..','private','admin.html'))
 })  
 // Toutes les routes suivantes exigent maintenant le cookie de session admin.
 router.post('/creeAdmin',checkDataCreat,NewAdmin)

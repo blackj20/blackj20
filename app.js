@@ -20,7 +20,7 @@ app.use(express.json())
 app.use('/', require('./routes/main.route'))
 
 app.use((req,res)=>{
-   res.sendFile(path.join(__dirname,'./public/not_found.html'))
+   res.sendFile(path.join(__dirname,'.','private','not_found.html'))
    
 })
 
