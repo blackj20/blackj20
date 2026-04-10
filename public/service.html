@@ -13,7 +13,7 @@
 <body>
     <header>
         <div class="logo">
-            <img src="/image/logo.png" alt="le logo de l'entreprise">
+            <img src="/image/logo.png" alt="EMC Construction" class="logo">
         </div>
 
         <input type="checkbox" id="nav-toggle" class="nav-toggle" aria-label="Ouvrir le menu" />
@@ -32,6 +32,12 @@
         </nav>
     </header>
     <main>
+        <div class="search-bar">
+            <input class="search-input" type="text" placeholder="Rechercher..." id="service-search">
+            <button class="search-btn" id="service-search-btn" aria-label="Rechercher">
+                <i class="fa-solid fa-magnifying-glass"></i>
+            </button>
+        </div>
 
         <section class="detaile_service">
             <h1>Nos Services</h1>
@@ -79,6 +85,6 @@
 
         <p class="footer-copy">© 2024 EMC Construction. Tous droits réservés.</p>
     </footer>
-    
+    <script src="js/service.js"></script>
 </body>
 </html>

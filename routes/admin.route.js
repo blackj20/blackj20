@@ -7,7 +7,7 @@ const {  logincheck,isAdmin,auth,checkDataCreat }=require('../middleware/global.
 
 
 
-router.get('/login_3' ,(req,res)=>{
+router.get('/login' ,(req,res)=>{
   res.sendFile(path.join(__dirname,'..','private','login.html'))
 })
 

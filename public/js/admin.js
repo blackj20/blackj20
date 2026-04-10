@@ -74,7 +74,11 @@ const fetchJSON = async (url, options = {}) => {
     // On privilegie le message metier du serveur.
     const msg = data?.message || res.statusText
     if (res.status === 401 || res.status === 403) {
-      setTimeout(() => { window.location.href = '/admin/login' }, 700)
+      const params = new URLSearchParams({
+        status: String(res.status),
+        message: msg
+      })
+      setTimeout(() => { window.location.href = `/error?${params.toString()}` }, 700)
     }
     throw new Error(msg)
   }

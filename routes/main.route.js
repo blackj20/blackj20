@@ -15,6 +15,10 @@ router.use('/api',require('./api.route'))
 router.get('/', (req,res)=>{
    res.sendFile(path.join(__dirname,'../public/accueil.html'))
 } )
+
+router.get('/error', (req, res) => {
+   res.sendFile(path.join(__dirname,'../private/error.html'))
+})
 // router.get('/apropos', (req,res)=>{
 //    res.sendFile(path.join(__dirname,'../public/about.html'))
 // } )

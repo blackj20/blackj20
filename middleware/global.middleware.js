@@ -1,5 +1,23 @@
 const tools=require('../utils/tootls.utils')
 const { getUserByIdentifiant}=require('../services/admin.service')
+
+const wantsHtml = (req) => {
+  const accept = req.headers.accept || ''
+  return accept.includes('text/html')
+}
+
+const sendErrorResponse = (req, res, status, message) => {
+  if (wantsHtml(req)) {
+    const query = new URLSearchParams({
+      status: String(status),
+      message
+    })
+    return res.redirect(`/error?${query.toString()}`)
+  }
+
+  return res.status(status).json({ status, message })
+}
+
 const routeRequette=(req,res,next)=>{ // on coute tout demmend extern
 
     const auth=["accueil","realisation","actualites","annonce"]
@@ -7,12 +25,12 @@ const routeRequette=(req,res,next)=>{ // on coute tout demmend extern
 
 
     if(!auth.includes(data)){
-        res.status(400).json({message:"eh bein on n'est perdues ?"})
+        return sendErrorResponse(req, res, 400, "eh bein on n'est perdues ?")
         
     }
     
     else if(req.method !== "POST"){
-        res.status(400).json({message:"Ohooo on est coince?"})
+        return sendErrorResponse(req, res, 400, "Ohooo on est coince?")
     }
     else{
         next()
@@ -44,15 +62,15 @@ const checkDataCreat = (req, res, next) => {
     const { username, hash } = req.body
 
     if (!username || !hash)
-      res.status(401).json({ message: 'donne incomplet' })
-    else if (req.path !== '/creeAdmin') res.status(400).json({ message: "erruer chemin. On n'est perdue? :)" })
-    else if (req.method !== 'POST') res.status(400).json({ message: "erruer methode . ici tu donne pas l'inverse  :)" })
+      return sendErrorResponse(req, res, 401, 'donne incomplet')
+    else if (req.path !== '/creeAdmin') return sendErrorResponse(req, res, 400, "erruer chemin. On n'est perdue? :)")
+    else if (req.method !== 'POST') return sendErrorResponse(req, res, 400, "erruer methode . ici tu donne pas l'inverse  :)")
     else {
       req.body.valide = true
       next()
     }
   } catch (err) {
-    res.status(400).json({ message: 'erreur :' + err })
+    return sendErrorResponse(req, res, 400, 'erreur :' + err)
   }
 }
 // ------------------------ check login --------------------------
@@ -62,11 +80,11 @@ const logincheck = (req, res, next) => {
 
   // Si un des deux champs manque, inutile d'aller plus loin.
   if (!username || !hash) {
-    res.status(403).json({ message: 'donne incorect' })
+    return sendErrorResponse(req, res, 403, 'donne incorect')
   // On s'assure que ce middleware ne sert bien qu'a la route /login.
-  } else if (req.path !== '/login') res.status(400).json({ message: "erruer chemin. On n'est perdue? :)" })
+  } else if (req.path !== '/login') return sendErrorResponse(req, res, 400, "erruer chemin. On n'est perdue? :)")
   // Ce controle evite les methodes inattendues sur cette route.
-  else if (req.method !== 'POST') res.status(400).json({ message: "erruer methode . ici tu donne pas l'inverse  :)" })
+  else if (req.method !== 'POST') return sendErrorResponse(req, res, 400, "erruer methode . ici tu donne pas l'inverse  :)")
   else {
     // Tout est bon: on laisse le controller de login travailler.
     next()
@@ -78,7 +96,7 @@ const auth = async (req, res, next) => {
   const token = tools.getTokenFromRequest(req)
 
   // Sans token, la route admin doit etre refusee.
-  if (!token) return res.status(403).json({ message: 'pas de token' })
+  if (!token) return sendErrorResponse(req, res, 403, 'pas de token')
 
   try {
     // Le helper verifie la signature et retourne les infos du JWT.
@@ -95,7 +113,7 @@ const auth = async (req, res, next) => {
     next()
   } catch (err) {
     // Token invalide, mal signe ou expire.
-    return res.status(403).json({ message: 'invalid or expired token: ' + err.message })
+    return sendErrorResponse(req, res, 403, 'invalid or expired token: ' + err.message)
   }
 }
 
@@ -106,18 +124,18 @@ const isAdmin = async(req, res, next) => {
 
   // Si aucun utilisateur n'est injecte, la verif precedente n'a pas abouti.
   if (!user) {
-    return res.status(400).json({ message: 'page reserve pour admins .' })
+    return sendErrorResponse(req, res, 400, 'page reserve pour admins .')
   }
 
   const dbUser = await getUserByIdentifiant(user.username)
 
   if (!dbUser) {
-    return res.status(403).json({ message: 'erreur token phantom ce token na pas de user il ne passera jamais.' })
+    return sendErrorResponse(req, res, 403, 'erreur token phantom ce token na pas de user il ne passera jamais.')
   }
 
   // Ici on verrouille les routes reservees au role admin.
   if (dbUser.role !== 'admin') {
-    return res.status(403).json({ message: 'page reserve aux admins .' })
+    return sendErrorResponse(req, res, 403, 'page reserve aux admins .')
   }
 
   // Tout est bon: l'utilisateur est bien admin.
@@ -129,15 +147,15 @@ const checkCoockie = (req, res, next) => {
   // Ce middleware réutilise exactement la meme lecture que `auth`.
   const token = tools.getTokenFromRequest(req)
 
-  if (!token) return res.status(401).json({ message: ' pas de token ' })
+  if (!token) return sendErrorResponse(req, res, 401, 'pas de token')
   try {
     // On decode le JWT puis on l'accroche a la requete.
     const user = tools.decoded(token)
     req.user = user
     next()
   } catch (err) {
-    return res.status(403).json({ message: 'invalid or expired token: ' + err.message })
+    return sendErrorResponse(req, res, 403, 'invalid or expired token: ' + err.message)
   }
 }
 
-module.exports={routeRequette,trafique, logincheck,isAdmin,auth ,checkDataCreat,checkCoockie }
+module.exports={routeRequette,trafique, logincheck,isAdmin,auth ,checkDataCreat,checkCoockie, sendErrorResponse }
