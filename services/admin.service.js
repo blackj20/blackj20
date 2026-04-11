@@ -25,11 +25,15 @@ const upload = multer({ storage })
 
 // On centralise la construction de l'URL publique ici pour eviter
 // que des images restent liees a `localhost` une fois l'app deployee.
+// La variable recommandee dans `.env` est `PUBLIC_URL`.
+// On garde `url` et `URL` en secours pour ne pas casser l'existant.
 const getPublicBaseUrl = () => {
-  const configuredUrl = process.env.url || process.env.URL || ''
+  const configuredUrl = process.env.PUBLIC_URL || process.env.url || process.env.URL || ''
   return configuredUrl.replace(/\/+$/, '')
 }
 
+// Cette fonction extrait toujours un chemin de type `uploads/...`
+// meme si la base contient deja une URL complete.
 const normalizeImagePath = (imagePath = '') => {
   try {
     const parsedUrl = new URL(imagePath)
@@ -46,6 +50,8 @@ const normalizeImagePath = (imagePath = '') => {
 const buildPublicImageUrl = (imagePath = '') => {
   if (!imagePath) return imagePath
 
+  // On reconstruit toujours l'URL finale avec la base publique
+  // afin de remplacer automatiquement les anciens liens `localhost`.
   const normalizedPath = normalizeImagePath(imagePath)
   const baseUrl = getPublicBaseUrl()
 
@@ -58,10 +64,13 @@ const mapImageFields = (row = {}) => {
 
   const nextRow = { ...row }
 
+  // Les contenus metiers utilisent `image`.
   if (nextRow.image) {
     nextRow.image = buildPublicImageUrl(nextRow.image)
   }
 
+  // La galerie admin manipule `path`, donc on expose aussi `url`
+  // pour afficher l'image directement avec le bon domaine public.
   if (nextRow.path) {
     nextRow.url = buildPublicImageUrl(nextRow.path)
   }

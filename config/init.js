@@ -56,6 +56,47 @@ const backfillActualiteCreatedAt = () => {
   )
 }
 
+const backfillImageUrls = () => {
+  // `PUBLIC_URL` est la variable standard a utiliser dans `.env`.
+  // Les anciens noms restent acceptes ici en secours pour les vieilles configs.
+  const publicBaseUrl = (process.env.PUBLIC_URL || process.env.url || process.env.URL || '').replace(/\/+$/, '')
+
+  if (!publicBaseUrl) {
+    console.log('Image URL backfill skipped: missing public url in .env')
+    return
+  }
+
+  // Cette migration remplace les anciennes URLs `localhost`
+  // deja en base par l'URL publique definie dans le `.env`.
+  // On couvre les deux anciens formats detectes en base:
+  // `http://localhost:8080/...` et `http://localhost/...`.
+  db.run(
+    `UPDATE actualite
+     SET image = REPLACE(REPLACE(image, 'http://localhost:8080', ?), 'http://localhost', ?)
+     WHERE image LIKE 'http://localhost:8080/%'
+        OR image LIKE 'http://localhost/%'`,
+    [publicBaseUrl, publicBaseUrl],
+    (err) => {
+      if (err) {
+        console.log('Error while backfilling actualite.image URLs', err)
+      }
+    }
+  )
+
+  db.run(
+    `UPDATE realisation
+     SET image = REPLACE(REPLACE(image, 'http://localhost:8080', ?), 'http://localhost', ?)
+     WHERE image LIKE 'http://localhost:8080/%'
+        OR image LIKE 'http://localhost/%'`,
+    [publicBaseUrl, publicBaseUrl],
+    (err) => {
+      if (err) {
+        console.log('Error while backfilling realisation.image URLs', err)
+      }
+    }
+  )
+}
+
 db.serialize(() => {
   db.run(`CREATE TABLE IF NOT EXISTS users (
       id INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -120,6 +161,7 @@ db.serialize(() => {
   ensureColumnExists('realisation', 'created_at', 'datetime', () => {
     backfillRealisationCreatedAt()
   })
+  backfillImageUrls()
 })
 
 module.exports = db
