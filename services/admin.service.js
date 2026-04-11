@@ -23,6 +23,52 @@ const storage = multer.diskStorage({
 
 const upload = multer({ storage })
 
+// On centralise la construction de l'URL publique ici pour eviter
+// que des images restent liees a `localhost` une fois l'app deployee.
+const getPublicBaseUrl = () => {
+  const configuredUrl = process.env.url || process.env.URL || ''
+  return configuredUrl.replace(/\/+$/, '')
+}
+
+const normalizeImagePath = (imagePath = '') => {
+  try {
+    const parsedUrl = new URL(imagePath)
+    const cleaned = parsedUrl.pathname.replace(/^\/+/, '')
+    if (cleaned.startsWith('uploads/')) return cleaned
+    return `uploads/${cleaned}`
+  } catch {
+    const cleaned = String(imagePath).replace(/^\/+/, '')
+    if (cleaned.startsWith('uploads/')) return cleaned
+    return `uploads/${cleaned}`
+  }
+}
+
+const buildPublicImageUrl = (imagePath = '') => {
+  if (!imagePath) return imagePath
+
+  const normalizedPath = normalizeImagePath(imagePath)
+  const baseUrl = getPublicBaseUrl()
+
+  if (!baseUrl) return `/${normalizedPath}`
+  return `${baseUrl}/${normalizedPath}`
+}
+
+const mapImageFields = (row = {}) => {
+  if (!row || typeof row !== 'object') return row
+
+  const nextRow = { ...row }
+
+  if (nextRow.image) {
+    nextRow.image = buildPublicImageUrl(nextRow.image)
+  }
+
+  if (nextRow.path) {
+    nextRow.url = buildPublicImageUrl(nextRow.path)
+  }
+
+  return nextRow
+}
+
 
 const saveImageRecord = (file) => {//service
   if (!file) return Promise.reject('aucun fichier fourni')
@@ -166,13 +212,6 @@ const topImages = (limit = 5) => {
       resolve(rows)
     })
   })
-}
-
-// -------------------- image views --------------------
-const normalizeImagePath = (imagePath = '') => {
-  const cleaned = imagePath.replace(/^\/+/, '')
-  if (cleaned.startsWith('uploads/')) return cleaned
-  return `uploads/${cleaned}`
 }
 
 const incrementImageView = (imagePath) => {
@@ -319,6 +358,8 @@ const createAdmin=async ({username,hash})=>{// on cree les user avec le mot de p
 module.exports = {
   upload,
   saveImageRecord,
+  buildPublicImageUrl,
+  mapImageFields,
   creeUnactualiter,
   creeUnrealisation,
   creeUnannonce,

@@ -1,6 +1,6 @@
 // recuperation des donne pour les trois main page de user 
 
-const { getAllElement, incrementImageView }= require('../services/admin.service')
+const { getAllElement, incrementImageView, mapImageFields }= require('../services/admin.service')
   
 
 // =========================== pou eviter de diplique la meme code  ==========================
@@ -12,7 +12,9 @@ const server_api=async(req,res)=>{
         case "realisation":
             try {
                 const data_realisation = await getAllElement("realisation")
-                res.json(data_realisation) // on envoie un tableau pour eviter les erreur de type dans le front
+                // On remplace ici les anciennes URLs `localhost` par l'URL publique du `.env`
+                // avant d'envoyer les donnees au front.
+                res.json(data_realisation.map((row) => mapImageFields(row))) // on envoie un tableau pour eviter les erreur de type dans le front
                
             } catch (err) {
                 res.status(500).json({ message: "une erreur se produit "+err })
@@ -22,7 +24,7 @@ const server_api=async(req,res)=>{
         case "actualite":
             try {
                 const actualitesData =await getAllElement("actualite")
-                res.json(actualitesData)
+                res.json(actualitesData.map((row) => mapImageFields(row)))
             } catch (err) {
                res.status(500).json({ message: "une erreur se produit "+err })
             }
@@ -32,7 +34,7 @@ const server_api=async(req,res)=>{
             try {
                 const accueilData =await getAllElement("realisation")
                 console.log(accueilData)
-                res.json(accueilData)
+                res.json(accueilData.map((row) => mapImageFields(row)))
             } catch (error) {
                 res.status(500).json({ message: "une erreur se produit "+error })
             }

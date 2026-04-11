@@ -107,9 +107,9 @@ const loadImages = async () => {
   state.rows.images = data
   counters.images.textContent = data.length
   lists.images.innerHTML = data
-    .map(({ id, path, filename }) => `
+    .map(({ id, path, url, filename }) => `
       <figure class="thumb" data-id="${id}">
-        <img src="/${path}" alt="${filename}">
+        <img src="${url || `/${path}`}" alt="${filename}">
         <figcaption>${filename}</figcaption>
         <button class="btn ghost action-delete" data-type="images" data-id="${id}">Supprimer</button>
       </figure>
@@ -361,7 +361,7 @@ const loadStats = async () => {
   topImagesList.innerHTML = (data.topImages || [])
     .map((img, idx) => `
       <li>
-        <img src="/${img.path}" alt="${img.filename}">
+        <img src="${img.url || `/${img.path}`}" alt="${img.filename}">
         <div>
           <span class="badge">#${idx + 1}</span><br>
           <strong>${img.filename}</strong><br>

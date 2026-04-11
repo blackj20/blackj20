@@ -97,7 +97,9 @@ const uploadImage = async (req, res) => {// controller
     
     const saved = await srv.saveImageRecord(req.file)
 
-    const url = req.protocol + '://' + req.get('host') + '/' + saved.path
+    // L'URL de retour doit toujours utiliser la base publique du `.env`
+    // pour eviter de renvoyer `http://localhost:8080/...` au front.
+    const url = srv.buildPublicImageUrl(saved.path)
 
     res.status(201).json({
       message: 'Image uploadée avec succès',
@@ -115,7 +117,7 @@ const uploadImage = async (req, res) => {// controller
 const listElements = (table) => async (req, res) => {
   try {
     const data = await srv.getAllElement(table)
-    res.json(data)
+    res.json(data.map((row) => srv.mapImageFields(row)))
   } catch (error) {
     res.status(500).json({ message: 'erreur lors de la récupération des données', error: error.message })
   }
@@ -148,7 +150,7 @@ const getStats = async (req, res) => {
   try {
     const visitors = await srv.countVisitors()
     const topImages = await srv.topImages(5)
-    res.json({ visitors, topImages })
+    res.json({ visitors, topImages: topImages.map((row) => srv.mapImageFields(row)) })
   } catch (error) {
     res.status(500).json({ message: 'erreur lors de la récupération des stats', error: error.message })
   }
