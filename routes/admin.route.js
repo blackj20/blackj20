@@ -6,19 +6,15 @@ const { upload } = require('../services/admin.service')
 const {  logincheck,isAdmin,auth,checkDataCreat }=require('../middleware/global.middleware')
 
 
-
+// Route publique: elle sert uniquement a creer la session admin.
 router.get('/login' ,(req,res)=>{
   res.sendFile(path.join(__dirname,'..','private','login.html'))
 })
 
-// Route publique: elle sert uniquement a creer la session admin.
-router.post('/login' ,logincheck, login,)
+
+
 // Route publique vers l'ecran de connexion admin.
-
-// la pege de'erreur 
-
-
-
+router.post('/login' ,logincheck, login,)
 // ================= get route ==============================
 router.get('/',auth,isAdmin, (req, res) => {
   // Si on arrive ici, `auth` + `isAdmin` sont deja passes avant.
