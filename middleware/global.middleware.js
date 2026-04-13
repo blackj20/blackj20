@@ -6,6 +6,12 @@ const wantsHtml = (req) => {
   return accept.includes('text/html')
 }
 
+const isAdminHtmlRequest = (req) => {
+  // On cible uniquement les navigations navigateur vers l'espace admin.
+  const url = req.originalUrl || req.url || ''
+  return wantsHtml(req) && url.startsWith('/admin') && !url.startsWith('/admin/login')
+}
+
 const sendErrorResponse = (req, res, status, message) => {
   if (wantsHtml(req)) {
     const query = new URLSearchParams({
@@ -95,8 +101,15 @@ const auth = async (req, res, next) => {
   // On lit d'abord le cookie, puis `Authorization` en secours.
   const token = tools.getTokenFromRequest(req)
 
-  // Sans token, la route admin doit etre refusee.
-  if (!token) return sendErrorResponse(req, res, 403, 'pas de token')
+  // Sur une vraie page admin HTML, on prefere renvoyer vers le login
+  // plutot que vers l'ecran d'erreur generique.
+  if (!token) {
+    if (isAdminHtmlRequest(req)) {
+      return res.redirect('/admin/login')
+    }
+
+    return sendErrorResponse(req, res, 403, 'pas de token')
+  }
 
   try {
     // Le helper verifie la signature et retourne les infos du JWT.
@@ -113,6 +126,12 @@ const auth = async (req, res, next) => {
     next()
   } catch (err) {
     // Token invalide, mal signe ou expire.
+    // Pour l'interface admin HTML, on renvoie vers le login afin
+    // d'eviter l'impression qu'on doit ressaisir un token a la main.
+    if (isAdminHtmlRequest(req)) {
+      return res.redirect('/admin/login')
+    }
+
     return sendErrorResponse(req, res, 403, 'invalid or expired token: ' + err.message)
   }
 }

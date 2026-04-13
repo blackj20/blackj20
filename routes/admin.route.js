@@ -3,11 +3,32 @@ const router = express.Router()
 const path = require('path')
 const { realisation, actualite, annonce, uploadImage, listElements,NewAdmin, updateElement, deleteElement, TARGETS, getStats, login, logout } = require('../controllers/admin.controller')
 const { upload } = require('../services/admin.service')
+const { getUserByIdentifiant } = require('../services/admin.service')
 const {  logincheck,isAdmin,auth,checkDataCreat }=require('../middleware/global.middleware')
+const tools = require('../utils/tootls.utils')
 
 
 // Route publique: elle sert uniquement a creer la session admin.
-router.get('/login' ,(req,res)=>{
+router.get('/login' ,async (req,res)=>{
+  // Le login reste accessible publiquement, mais si une session admin
+  // valide existe deja on evite de reafficher inutilement ce formulaire.
+  try {
+    const token = tools.getTokenFromRequest(req)
+
+    if (token) {
+      const user = tools.decoded(token)
+      const dbUser = await getUserByIdentifiant(user.username)
+
+      if (dbUser?.role === 'admin') {
+        return res.redirect('/admin')
+      }
+    }
+  } catch (err) {
+    // Si le cookie est absent, invalide ou expire, on ignore simplement
+    // l'erreur ici pour laisser l'utilisateur se reconnecter tranquillement.
+  }
+
+  // Sans session valide, on affiche normalement la page de login.
   res.sendFile(path.join(__dirname,'..','private','login.html'))
 })
 
