@@ -1,14 +1,9 @@
-p{
-    margin-left: 20px;
-}
-li{
-      margin-left: 20px;
-}
+
 
 
 h1{
     color: rgb(255, 180, 4);
-    margin: 5px;
+    margin: 5p 10x;
 }
 h2{
     color: rgb(255, 180, 4);
@@ -23,21 +18,6 @@ span>i{
   margin: 20px;
 }
 
-.misson{
-    margin: 5px;
-}
-
-.vision{
-    margin: 5px;
-}
-
-.valeurs{
-    margin: 5px;
-}
-
-.contact{
-    margin: 5px;
-}
 
 
 

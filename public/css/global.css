@@ -61,7 +61,7 @@ nav a:hover{
     display: none;
     cursor: pointer;
     padding: 18px;
-    margin-right: 20px;
+    margin-left: 10px;
 }
 .nav-toggle-label span,
 .nav-toggle-label span::before,
@@ -146,24 +146,30 @@ footer,
     *{
         font-size: 14px;
         margin: 5px ,0px;
+        
 
     }
    
     header{
         flex-direction: row;
         align-items: center;
-        height: 60px;
+        height: 50px;
         padding: 10px 0px;
     }
-    .logo {
+    .logo,img {
         margin-left: 0;
+        padding: 10px 0;
+        width: 50px;
+
     }
     .nav-toggle-label {
         display: block;
+        
+        
     }
     nav {
         position: absolute;
-        top: 60px;
+        top: 70px;
         right: 0;
         width: 100%;
         background: linear-gradient(to right, #0d0d0d, rgba(34, 82, 8, 0.739), #523a0a);
@@ -313,8 +319,8 @@ footer,
     animation: search-hit-flash 1.6s ease-out;
 }
 
-@media (max-width: 700px){
-    .search-bar{ width: 350px; display: flex; margin-left: 50px; }
-    .search-input{flex: 1 1 100%; width:150px; }
+@media (max-width: 600px){
+    .search-bar{ width: 90%; margin: 16px 0 24px 38px;}
+    .search-input{flex: 1 1 100%; width:120px; }
     
 }
