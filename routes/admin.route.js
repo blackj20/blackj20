@@ -42,7 +42,8 @@ router.get('/',auth,isAdmin, (req, res) => {
   res.sendFile(path.join(__dirname,'..','private','admin.html'))
 })  
 // Toutes les routes suivantes exigent maintenant le cookie de session admin.
-router.post('/creeAdmin',checkDataCreat,NewAdmin)
+
+// router.post('/creeAdmin',checkDataCreat,NewAdmin) //cette route sert a cree les admin 
 
 router.use(auth, isAdmin)
 

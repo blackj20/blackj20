@@ -57,6 +57,7 @@ const backfillActualiteCreatedAt = () => {
 }
 
 const backfillImageUrls = () => {
+  
   // `PUBLIC_URL` est la variable standard a utiliser dans `.env`.
   // Les anciens noms restent acceptes ici en secours pour les vieilles configs.
   const publicBaseUrl = (process.env.PUBLIC_URL || process.env.url || process.env.URL || '').replace(/\/+$/, '')
@@ -70,6 +71,7 @@ const backfillImageUrls = () => {
   // deja en base par l'URL publique definie dans le `.env`.
   // On couvre les deux anciens formats detectes en base:
   // `http://localhost:8080/...` et `http://localhost/...`.
+
   db.run(
     `UPDATE actualite
      SET image = REPLACE(REPLACE(image, 'http://localhost:8080', ?), 'http://localhost', ?)
